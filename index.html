@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Martin Straňák — Frontend developer &amp; dizajnér</title>
+  <title>Martin Straňanek — Frontend developer &amp; dizajnér</title>
 
   <meta name="description"
-    content="Som Martin Straňák — frontend a full-stack developer zo Slovenska. Staviam weby na hranici dizajnu a kódu: hravé, rýchle a bezchybné." />
-  <meta name="author" content="Martin Straňák" />
+    content="Som Martin Straňanek — frontend a full-stack developer zo Slovenska. Staviam weby na hranici dizajnu a kódu: hravé, rýchle a bezchybné." />
+  <meta name="author" content="Martin Straňanek" />
   <link rel="canonical" href="https://darkmaster9452.github.io/idk/" />
 
   <meta name="theme-color" content="#efe7d6" media="(prefers-color-scheme: light)" />
@@ -16,7 +16,7 @@
 
   <!-- Open Graph / social -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Martin Straňák — Frontend developer &amp; dizajnér" />
+  <meta property="og:title" content="Martin Straňanek — Frontend developer &amp; dizajnér" />
   <meta property="og:description"
     content="Weby na hranici dizajnu a kódu. Hravé, rýchle a bezchybné." />
   <meta property="og:url" content="https://darkmaster9452.github.io/idk/" />
@@ -34,7 +34,7 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════════
-       Studio Straňák — custom portfolio
+       Studio Straňanek — custom portfolio
        Editorial + playful. Warm paper, ink, vermilion.
        ═══════════════════════════════════════════════════════════ */
 
@@ -396,35 +396,62 @@
     .fact .lab { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
 
     /* ══ WORK ══════════════════════════════════════════════ */
-    .work-list { display: grid; gap: clamp(18px, 2.5vw, 26px); }
+    .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(18px, 2.5vw, 28px); }
     .project {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: clamp(16px, 3vw, 40px);
-      align-items: center;
+      display: flex; flex-direction: column;
       background: var(--surface);
       border: 2px solid var(--line);
       border-radius: var(--r-lg);
-      padding: clamp(1.4rem, 3vw, 2.4rem);
       box-shadow: var(--shadow);
       transition: transform .3s var(--ease), box-shadow .3s var(--ease);
-      position: relative;
+      overflow: hidden;
     }
     .project:hover { transform: translate(-4px, -4px); box-shadow: var(--shadow-lg); }
-    .project .p-num { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
-    .project .p-main h3 { font-size: clamp(1.5rem, 3.4vw, 2.5rem); font-weight: 500; }
-    .project .p-main .p-desc { color: var(--muted); margin-top: 0.4rem; max-width: 52ch; }
-    .project .p-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.9rem; }
-    .project .p-tags span { font-family: var(--font-mono); font-size: 0.68rem; padding: 0.25rem 0.6rem; border: 1.5px solid var(--line); border-radius: 999px; color: var(--muted); }
-    .project .p-side { display: flex; flex-direction: column; align-items: flex-end; gap: 0.8rem; }
-    .project .p-year { font-family: var(--font-mono); font-size: 0.85rem; color: var(--muted); }
-    .project .p-go {
-      width: 52px; height: 52px; border-radius: 50%;
-      border: 2px solid var(--line); display: grid; place-items: center;
-      transition: transform .3s var(--ease), background .3s, color .3s;
-      flex-shrink: 0;
+    .project .p-shot {
+      display: block; position: relative;
+      aspect-ratio: 16 / 9; overflow: hidden;
+      border-bottom: 2px solid var(--line);
+      background: var(--bg-tint);
     }
-    .project:hover .p-go { background: var(--accent); color: var(--on-accent); border-color: var(--accent); transform: rotate(45deg); }
+    .project .p-shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+    .project:hover .p-shot img { transform: scale(1.04); }
+    .project .p-live {
+      position: absolute; top: 12px; right: 12px; z-index: 2;
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+      padding: 0.35rem 0.7rem; border-radius: 999px;
+      background: var(--accent); color: var(--on-accent);
+      border: 2px solid var(--line);
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      box-shadow: 2px 2px 0 var(--line);
+      transition: transform .2s var(--ease);
+    }
+    .project .p-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--on-accent); }
+    .project .p-live:hover { transform: translate(-1px, -1px); }
+    .project .p-body { padding: clamp(1.25rem, 2.5vw, 1.8rem); display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
+    .project .p-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .project .p-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+    .project .p-year { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+    .project h3 { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 500; }
+    .project .p-desc { color: var(--muted); font-size: 0.96rem; }
+    .project .p-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.2rem; }
+    .project .p-tags span { font-family: var(--font-mono); font-size: 0.66rem; padding: 0.22rem 0.55rem; border: 1.5px solid var(--line); border-radius: 999px; color: var(--muted); }
+    .project .p-links { display: flex; gap: 0.6rem; margin-top: auto; padding-top: 0.6rem; }
+    .project .p-links a {
+      font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
+      padding: 0.55rem 0.95rem; border-radius: 10px;
+      border: 2px solid var(--line);
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: transform .2s var(--ease), background .25s, color .25s, box-shadow .2s var(--ease);
+    }
+    .project .p-links .go { background: var(--accent); color: var(--on-accent); box-shadow: 2px 2px 0 var(--line); }
+    .project .p-links .go:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--line); }
+    .project .p-links .code { background: var(--surface); }
+    .project .p-links .code:hover { background: var(--ink); color: var(--bg); }
+    .work-note { max-width: 62ch; color: var(--muted); margin-bottom: clamp(1.6rem, 3vw, 2.4rem); font-size: 1.02rem; }
+    .work-note em { color: var(--ink); font-style: normal; font-weight: 600; }
+    .work-more { margin-top: clamp(1.6rem, 3vw, 2.4rem); font-family: var(--font-mono); font-size: 0.9rem; }
+    .work-more a { border-bottom: 2px solid var(--accent); padding-bottom: 2px; transition: color .2s; }
+    .work-more a:hover { color: var(--accent); }
 
     /* ══ SERVICES ══════════════════════════════════════════ */
     .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.5vw, 24px); }
@@ -456,6 +483,7 @@
 
     /* ══ STACK ═════════════════════════════════════════════ */
     .stack-wrap { border: 2px solid var(--line); border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); padding: clamp(1.6rem, 4vw, 3rem); }
+    .stack-note { color: var(--muted); max-width: 60ch; margin-bottom: 1.4rem; font-size: 0.98rem; }
     .stack-tags { display: flex; flex-wrap: wrap; gap: 0.7rem; }
     .stack-tags .tag {
       font-family: var(--font-mono); font-size: 0.9rem; font-weight: 500;
@@ -463,9 +491,11 @@
       border: 2px solid var(--line); background: var(--bg);
       box-shadow: 2px 2px 0 var(--line);
       transition: transform .2s var(--ease), background .2s, color .2s, box-shadow .2s;
-      cursor: default;
+      display: inline-flex; align-items: center; gap: 0.45rem;
     }
+    .stack-tags .tag::after { content: "↗"; font-size: 0.72em; opacity: 0.45; transition: opacity .2s; }
     .stack-tags .tag:hover { transform: translate(-2px, -2px) rotate(-2deg); background: var(--accent); color: var(--on-accent); box-shadow: 4px 4px 0 var(--line); }
+    .stack-tags .tag:hover::after { opacity: 1; }
 
     /* ══ CONTACT ═══════════════════════════════════════════ */
     .contact {
@@ -528,8 +558,7 @@
       .badge { display: none; }
       .about-grid { grid-template-columns: 1fr; }
       .cards-3 { grid-template-columns: 1fr; }
-      .project { grid-template-columns: auto 1fr; }
-      .project .p-side { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+      .work-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 720px) {
       .nav-links .navlink { display: none; }
@@ -563,9 +592,9 @@
   <!-- ═══ NAV ═══ -->
   <header class="nav" id="nav">
     <div class="wrap">
-      <a href="#top" class="brand" aria-label="Martin Straňák — domov">
+      <a href="#top" class="brand" aria-label="Martin Straňanek — domov">
         <span class="mark">MS</span>
-        <span class="brand-name">Martin&nbsp;Straňák<br /><small>frontend &amp; dizajn</small></span>
+        <span class="brand-name">Martin&nbsp;Straňanek<br /><small>frontend &amp; dizajn</small></span>
       </a>
       <nav class="nav-links" aria-label="Hlavná navigácia">
         <a class="navlink" href="#work">Práca</a>
@@ -648,7 +677,7 @@
       <div class="about-grid">
         <div class="about-copy reveal">
           <p>
-            Som <span class="name-line">Martin Straňák</span> — developer, ktorý neznesie
+            Som <span class="name-line">Martin Straňanek</span> — developer, ktorý neznesie
             polovičaté weby. Baví ma moment, keď sa <span class="hl">dobrý dizajn stretne s čistým kódom</span>
             a stránka zrazu ožije.
           </p>
@@ -679,48 +708,131 @@
         <h2>Vybraná práca</h2>
         <span class="idx">02 — projekty</span>
       </div>
-      <div class="work-list">
-        <!-- Uprav si projekty na vlastné: názov, popis, tagy, rok a odkaz (href) -->
-        <a class="project reveal" href="#" aria-label="Projekt Lumen">
-          <span class="p-num">/ 01</span>
-          <div class="p-main">
-            <h3>Lumen</h3>
-            <p class="p-desc">Analytický dashboard pre SaaS — prehľadné dáta, plynulé grafy a rozhranie, v ktorom sa nestratíš ani po hodinách.</p>
-            <div class="p-tags"><span>React</span><span>TypeScript</span><span>Dataviz</span><span>Design system</span></div>
-          </div>
-          <div class="p-side"><span class="p-year">2025</span><span class="p-go">↗</span></div>
-        </a>
+      <p class="work-note reveal">Reálne projekty z môjho GitHubu. Klikni na náhľad alebo <em>Živá ukážka</em> a otvorí sa fungujúca stránka; <em>Kód</em> ťa vezme do repozitára — commity, README a fotky ukazujú aj proces.</p>
+      <div class="work-grid">
 
-        <a class="project reveal" href="#" aria-label="Projekt Fjord">
-          <span class="p-num">/ 02</span>
-          <div class="p-main">
-            <h3>Fjord</h3>
-            <p class="p-desc">E-shop s dôrazom na rýchlosť a atmosféru. Jemné animácie, ktoré predávajú, bez toho aby zdržovali.</p>
-            <div class="p-tags"><span>Next.js</span><span>Commerce</span><span>Motion</span><span>SEO</span></div>
+        <!-- 01 · Pyro & Polomárik -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://pyro-pizzeria.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Pyro &amp; Polomárik">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu Pyro & Polomárik"
+              src="https://opengraph.githubassets.com/pyro/DarkMaster9452/Pyro-pizzeria"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 01</span><span class="p-year">2026</span></div>
+            <h3>Pyro &amp; Polomárik</h3>
+            <p class="p-desc">Multi-restaurant platforma na objednávanie pizze pre dve prevádzky pod jednou strechou. Výber reštaurácie, menu s filtrami, customizér pizze so živou cenou, košík s kupónmi a celý checkout — end-to-end v prehliadači.</p>
+            <div class="p-tags"><span>Next.js</span><span>TypeScript</span><span>E-commerce</span><span>UI/UX</span></div>
+            <div class="p-links">
+              <a class="go" href="https://pyro-pizzeria.vercel.app" target="_blank" rel="noopener">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/Pyro-pizzeria" target="_blank" rel="noopener">Kód →</a>
+            </div>
           </div>
-          <div class="p-side"><span class="p-year">2025</span><span class="p-go">↗</span></div>
-        </a>
+        </article>
 
-        <a class="project reveal" href="#" aria-label="Projekt Kompas">
-          <span class="p-num">/ 03</span>
-          <div class="p-main">
-            <h3>Kompas</h3>
-            <p class="p-desc">Landing page pre startup, ktorá zdvihla konverzie. Silná typografia, jasný príbeh a interakcie, čo držia pozornosť.</p>
-            <div class="p-tags"><span>HTML/CSS</span><span>GSAP</span><span>Copy</span><span>Konverzie</span></div>
+        <!-- 02 · OŠK Kamenná Poruba -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://oskkp.sk" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku OŠK Kamenná Poruba">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu OŠK Kamenná Poruba"
+              src="https://opengraph.githubassets.com/osk/DarkMaster9452/OSK-Kamenna-Poruba-Web"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 02</span><span class="p-year">2026</span></div>
+            <h3>OŠK Kamenná Poruba</h3>
+            <p class="p-desc">Web futbalového klubu na vlastnej doméne. Verejná klubová stránka plus interné moduly pre trénerov, hráčov a rodičov — prihlásenie, oznamy, ankety, tréningy a integrácie na Sportnet a Instagram.</p>
+            <div class="p-tags"><span>Full-stack</span><span>Express</span><span>Prisma</span><span>PostgreSQL</span></div>
+            <div class="p-links">
+              <a class="go" href="https://oskkp.sk" target="_blank" rel="noopener">oskkp.sk ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/OSK-Kamenna-Poruba-Web" target="_blank" rel="noopener">Kód →</a>
+            </div>
           </div>
-          <div class="p-side"><span class="p-year">2024</span><span class="p-go">↗</span></div>
-        </a>
+        </article>
 
-        <a class="project reveal" href="#" aria-label="Projekt Studio Motion">
-          <span class="p-num">/ 04</span>
-          <div class="p-main">
-            <h3>Studio Motion</h3>
-            <p class="p-desc">Osobný sandbox interaktívnych experimentov — miesto, kde skúšam nové nápady skôr, než sa dostanú ku klientom.</p>
-            <div class="p-tags"><span>Canvas</span><span>WebGL</span><span>Experiment</span></div>
+        <!-- 03 · FK Rajec -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku FK Rajec">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu FK Rajec"
+              src="https://opengraph.githubassets.com/fkrajec/DarkMaster9452/FK-Rajec-Web-Koncept"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 03</span><span class="p-year">2026</span></div>
+            <h3>FK Rajec</h3>
+            <p class="p-desc">Oficiálny web futbalového klubu — koncept. Next.js 15, shadcn/ui a Tailwind v4, s Prisma, Neon PostgreSQL a NextAuth prihlásením. Klubové novinky, súpisky, zápasy a admin panel.</p>
+            <div class="p-tags"><span>Next.js 15</span><span>shadcn/ui</span><span>Prisma</span><span>NextAuth</span></div>
+            <div class="p-links">
+              <a class="go" href="https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/" target="_blank" rel="noopener">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/FK-Rajec-Web-Koncept" target="_blank" rel="noopener">Kód →</a>
+            </div>
           </div>
-          <div class="p-side"><span class="p-year">2024</span><span class="p-go">↗</span></div>
-        </a>
+        </article>
+
+        <!-- 04 · Maturita KB -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://maturitakb.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Maturita KB">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu Maturita KB"
+              src="https://opengraph.githubassets.com/matkb/DarkMaster9452/maturitna-kb"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 04</span><span class="p-year">2026</span></div>
+            <h3>Maturita KB</h3>
+            <p class="p-desc">Plnohodnotná webová appka na prípravu na maturitu. Roly študent / učiteľ / admin, materiály, testy, dashboard a prepínateľné témy. Next.js 14 + Neon PostgreSQL a JWT prihlásenie.</p>
+            <div class="p-tags"><span>Next.js 14</span><span>PostgreSQL</span><span>Auth</span><span>Dashboard</span></div>
+            <div class="p-links">
+              <a class="go" href="https://maturitakb.vercel.app" target="_blank" rel="noopener">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/maturitna-kb" target="_blank" rel="noopener">Kód →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 05 · Stavebné práce -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://michal-baranek.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Stavebné práce">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu Stavebné práce"
+              src="https://opengraph.githubassets.com/stav/DarkMaster9452/Stavebne-prace-web"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 05</span><span class="p-year">2026</span></div>
+            <h3>Stavebné práce</h3>
+            <p class="p-desc">Prezentačný web pre stavebnú firmu. Čistá jednostránka so službami, referenciami a jasnou výzvou na kontakt — rýchlo sa načíta a dobre vyzerá aj na mobile.</p>
+            <div class="p-tags"><span>HTML</span><span>CSS</span><span>Landing</span><span>Business</span></div>
+            <div class="p-links">
+              <a class="go" href="https://michal-baranek.vercel.app" target="_blank" rel="noopener">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/Stavebne-prace-web" target="_blank" rel="noopener">Kód →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 06 · Dark's Imperium -->
+        <article class="project reveal">
+          <a class="p-shot" href="https://darkmaster9452.github.io/Dark-s-Imperium/" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Dark's Imperium">
+            <span class="p-live">Live ↗</span>
+            <img loading="lazy" alt="Náhľad projektu Dark's Imperium"
+              src="https://opengraph.githubassets.com/imperium/DarkMaster9452/Dark-s-Imperium"
+              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
+          </a>
+          <div class="p-body">
+            <div class="p-top"><span class="p-num">/ 06</span><span class="p-year">2026</span></div>
+            <h3>Dark's Imperium</h3>
+            <p class="p-desc">Vlastný cenníkový web pre moje služby — prehľadné balíky, ceny a to, čo klient dostane, na jednom mieste. Slúži ako moja výkladná skriňa pri oslovovaní klientov.</p>
+            <div class="p-tags"><span>Pricing</span><span>Business</span><span>Web</span></div>
+            <div class="p-links">
+              <a class="go" href="https://darkmaster9452.github.io/Dark-s-Imperium/" target="_blank" rel="noopener">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/Dark-s-Imperium" target="_blank" rel="noopener">Kód →</a>
+            </div>
+          </div>
+        </article>
+
       </div>
+      <p class="work-more reveal"><a href="https://github.com/DarkMaster9452?tab=repositories" target="_blank" rel="noopener">Všetky repozitáre na GitHube →</a></p>
     </div>
   </section>
 
@@ -768,23 +880,24 @@
         <span class="idx">04 — stack</span>
       </div>
       <div class="stack-wrap reveal">
+        <p class="stack-note">Toto sú nástroje, s ktorými reálne robím projekty vyššie. Klikni na ktorýkoľvek — odkáže na jeho oficiálnu stránku.</p>
         <div class="stack-tags">
-          <span class="tag">JavaScript</span>
-          <span class="tag">TypeScript</span>
-          <span class="tag">React</span>
-          <span class="tag">Next.js</span>
-          <span class="tag">Node.js</span>
-          <span class="tag">HTML5</span>
-          <span class="tag">CSS3</span>
-          <span class="tag">Tailwind</span>
-          <span class="tag">GSAP</span>
-          <span class="tag">Framer Motion</span>
-          <span class="tag">Figma</span>
-          <span class="tag">PostgreSQL</span>
-          <span class="tag">Git</span>
-          <span class="tag">Vite</span>
-          <span class="tag">REST &amp; GraphQL</span>
-          <span class="tag">Accessibility</span>
+          <a class="tag" href="https://www.typescriptlang.org" target="_blank" rel="noopener">TypeScript</a>
+          <a class="tag" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noopener">JavaScript</a>
+          <a class="tag" href="https://react.dev" target="_blank" rel="noopener">React</a>
+          <a class="tag" href="https://nextjs.org" target="_blank" rel="noopener">Next.js</a>
+          <a class="tag" href="https://nodejs.org" target="_blank" rel="noopener">Node.js</a>
+          <a class="tag" href="https://expressjs.com" target="_blank" rel="noopener">Express</a>
+          <a class="tag" href="https://tailwindcss.com" target="_blank" rel="noopener">Tailwind CSS</a>
+          <a class="tag" href="https://ui.shadcn.com" target="_blank" rel="noopener">shadcn/ui</a>
+          <a class="tag" href="https://www.prisma.io" target="_blank" rel="noopener">Prisma</a>
+          <a class="tag" href="https://neon.tech" target="_blank" rel="noopener">Neon</a>
+          <a class="tag" href="https://www.postgresql.org" target="_blank" rel="noopener">PostgreSQL</a>
+          <a class="tag" href="https://authjs.dev" target="_blank" rel="noopener">NextAuth.js</a>
+          <a class="tag" href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>
+          <a class="tag" href="https://git-scm.com" target="_blank" rel="noopener">Git</a>
+          <a class="tag" href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">HTML</a>
+          <a class="tag" href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener">CSS</a>
         </div>
       </div>
     </div>
@@ -816,7 +929,7 @@
     <div class="wrap">
       <div class="foot-word reveal">Staviame?</div>
       <div class="foot-bottom">
-        <span>© <span id="year">2026</span> Martin Straňák · Vytvorené s ☕ a pozornosťou k detailu.</span>
+        <span>© <span id="year">2026</span> Martin Straňanek · Vytvorené s ☕ a pozornosťou k detailu.</span>
         <a href="#top" class="to-top">Späť hore ↑</a>
       </div>
     </div>
@@ -827,7 +940,7 @@
   {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "Martin Straňák",
+    "name": "Martin Straňanek",
     "jobTitle": "Frontend & full-stack developer",
     "email": "mailto:strananekm@gmail.com",
     "url": "https://darkmaster9452.github.io/idk/",
