@@ -427,6 +427,15 @@
     }
     .project .p-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--on-accent); }
     .project .p-live:hover { transform: translate(-1px, -1px); }
+    .project .p-concept {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.35rem 0.7rem; border-radius: 999px;
+      background: var(--surface); color: var(--ink);
+      border: 2px solid var(--line);
+      box-shadow: 2px 2px 0 var(--line);
+    }
     .project .p-body { padding: clamp(1.25rem, 2.5vw, 1.8rem); display: flex; flex-direction: column; gap: 0.7rem; flex: 1; }
     .project .p-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
     .project .p-num { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
@@ -754,6 +763,7 @@
         <!-- 03 · FK Rajec -->
         <article class="project reveal">
           <a class="p-shot" href="https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku FK Rajec">
+            <span class="p-concept">Koncept</span>
             <span class="p-live">Live ↗</span>
             <img loading="lazy" alt="Náhľad projektu FK Rajec"
               src="https://opengraph.githubassets.com/fkrajec/DarkMaster9452/FK-Rajec-Web-Koncept"
@@ -771,62 +781,23 @@
           </div>
         </article>
 
-        <!-- 04 · Maturita KB -->
-        <article class="project reveal">
-          <a class="p-shot" href="https://maturitakb.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Maturita KB">
-            <span class="p-live">Live ↗</span>
-            <img loading="lazy" alt="Náhľad projektu Maturita KB"
-              src="https://opengraph.githubassets.com/matkb/DarkMaster9452/maturitna-kb"
-              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
-          </a>
-          <div class="p-body">
-            <div class="p-top"><span class="p-num">/ 04</span><span class="p-year">2026</span></div>
-            <h3>Maturita KB</h3>
-            <p class="p-desc">Plnohodnotná webová appka na prípravu na maturitu. Roly študent / učiteľ / admin, materiály, testy, dashboard a prepínateľné témy. Next.js 14 + Neon PostgreSQL a JWT prihlásenie.</p>
-            <div class="p-tags"><span>Next.js 14</span><span>PostgreSQL</span><span>Auth</span><span>Dashboard</span></div>
-            <div class="p-links">
-              <a class="go" href="https://maturitakb.vercel.app" target="_blank" rel="noopener">Živá ukážka ↗</a>
-              <a class="code" href="https://github.com/DarkMaster9452/maturitna-kb" target="_blank" rel="noopener">Kód →</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- 05 · Stavebné práce -->
+        <!-- 04 · Stavebné práce (koncept) -->
         <article class="project reveal">
           <a class="p-shot" href="https://michal-baranek.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Stavebné práce">
+            <span class="p-concept">Koncept</span>
             <span class="p-live">Live ↗</span>
             <img loading="lazy" alt="Náhľad projektu Stavebné práce"
               src="https://opengraph.githubassets.com/stav/DarkMaster9452/Stavebne-prace-web"
               onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
           </a>
           <div class="p-body">
-            <div class="p-top"><span class="p-num">/ 05</span><span class="p-year">2026</span></div>
+            <div class="p-top"><span class="p-num">/ 04</span><span class="p-year">2026</span></div>
             <h3>Stavebné práce</h3>
             <p class="p-desc">Prezentačný web pre stavebnú firmu. Čistá jednostránka so službami, referenciami a jasnou výzvou na kontakt — rýchlo sa načíta a dobre vyzerá aj na mobile.</p>
             <div class="p-tags"><span>HTML</span><span>CSS</span><span>Landing</span><span>Business</span></div>
             <div class="p-links">
               <a class="go" href="https://michal-baranek.vercel.app" target="_blank" rel="noopener">Živá ukážka ↗</a>
               <a class="code" href="https://github.com/DarkMaster9452/Stavebne-prace-web" target="_blank" rel="noopener">Kód →</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- 06 · Dark's Imperium -->
-        <article class="project reveal">
-          <a class="p-shot" href="https://darkmaster9452.github.io/Dark-s-Imperium/" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Dark's Imperium">
-            <span class="p-live">Live ↗</span>
-            <img loading="lazy" alt="Náhľad projektu Dark's Imperium"
-              src="https://opengraph.githubassets.com/imperium/DarkMaster9452/Dark-s-Imperium"
-              onerror="this.onerror=null;this.src='assets/thumb-fallback.svg'" />
-          </a>
-          <div class="p-body">
-            <div class="p-top"><span class="p-num">/ 06</span><span class="p-year">2026</span></div>
-            <h3>Dark's Imperium</h3>
-            <p class="p-desc">Vlastný cenníkový web pre moje služby — prehľadné balíky, ceny a to, čo klient dostane, na jednom mieste. Slúži ako moja výkladná skriňa pri oslovovaní klientov.</p>
-            <div class="p-tags"><span>Pricing</span><span>Business</span><span>Web</span></div>
-            <div class="p-links">
-              <a class="go" href="https://darkmaster9452.github.io/Dark-s-Imperium/" target="_blank" rel="noopener">Živá ukážka ↗</a>
-              <a class="code" href="https://github.com/DarkMaster9452/Dark-s-Imperium" target="_blank" rel="noopener">Kód →</a>
             </div>
           </div>
         </article>
