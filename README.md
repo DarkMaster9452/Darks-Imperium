@@ -10,17 +10,26 @@ Otvor `index.html` v prehliadači, alebo:
 python3 -m http.server 8000   # potom http://localhost:8000
 ```
 
+## Jazyky
+Web je dvojjazyčný (SK / EN) — prepínač je v navigácii vpravo hore. Voľba sa ukladá
+(localStorage). Preklady sú v objekte `EN = {…}` v `<script>` na konci `index.html`;
+každý preložiteľný prvok má atribút `data-i18n="kľúč"` a slovenčina je priamo v HTML.
+
 ## Projekty
-Sekcia „Vybraná práca" ťahá reálne projekty z GitHubu (Pyro & Polomárik, OŠK Kamenná
-Poruba, FK Rajec, Maturita KB, Stavebné práce, Dark's Imperium). Náhľady sú GitHub
-OpenGraph karty; ak by sa nenačítali, zobrazí sa fallback `assets/thumb-fallback.svg`.
-Chceš pixel-presné fotky? Vlož vlastné PNG do `assets/` a zmeň `src` v `<img>` daného projektu.
+Sekcia „Vybraná práca" — reálne screenshoty projektov v `assets/`:
+Pyro & Polomárik, OŠK Kamenná Poruba, FK Rajec (koncept), Vantra (koncept).
+Náhľad + „Živá ukážka" + „Kód". Chceš vymeniť fotku? Prehoď súbor v `assets/`
+(napr. `assets/pyro.webp`) alebo zmeň `src` v `<img>` daného projektu.
+
+> **Vantra** má odkazy zatiaľ ako placeholder (`href="#"`, hľadaj `data-vantra-live`
+> a `data-vantra-code` v `index.html`) — doplň live URL a repo.
 
 ## Čo si ešte uprav
 - **Sociálne siete** — sekcia `#contact` (LinkedIn / Dribbble / X majú zatiaľ `#`).
-- **Fotka / text o mne** — sekcia `#about`.
-- **Toolbox** — sekcia `#stack`; tagy odkazujú na oficiálne stránky technológií.
+- **Text o mne** — sekcia `#about` (nezabudni aj EN v objekte `EN`).
+- **Toolbox** — sekcia `#stack`; tagy majú farebné logá a odkazujú na oficiálne stránky.
 
 ## Stack
 Čisté HTML + CSS + trocha vanilla JS. Písma: Fraunces, Space Grotesk, JetBrains Mono.
-Dark/light téma, prístupnosť (a11y) a `prefers-reduced-motion` v základe.
+Dvojjazyčnosť SK/EN, dark/light podľa systému, prístupnosť (a11y), `prefers-reduced-motion`
+a hravé prvky (3D náklon kariet, konfety, ťahateľná nálepka).
