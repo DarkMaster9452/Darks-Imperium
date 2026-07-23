@@ -579,6 +579,108 @@
     .foot-bottom a:hover { color: var(--accent); }
     .to-top { display: inline-flex; align-items: center; gap: 0.4rem; }
 
+    /* ══ Accessibility: keyboard focus ═════════════════════ */
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+    .nav-links a.navlink:focus-visible { outline-offset: 5px; }
+    .project:focus-within { box-shadow: var(--shadow-lg); }
+    /* Hide the decorative cursor from folks tabbing with a keyboard */
+    body.using-keyboard.has-cursor .cursor-dot,
+    body.using-keyboard.has-cursor .cursor-ring { opacity: 0; }
+
+    /* ══ Scroll progress bar ═══════════════════════════════ */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent); z-index: 101;
+      transform: scaleX(0); transform-origin: 0 50%;
+      will-change: transform; pointer-events: none;
+    }
+
+    /* ══ Theme toggle (sits next to language toggle) ═══════ */
+    .theme-toggle {
+      display: inline-grid; place-items: center;
+      padding: 0.42rem 0.55rem; line-height: 1;
+      border: 2px solid var(--line); border-radius: 11px;
+      background: var(--surface); color: var(--ink);
+      box-shadow: 2px 2px 0 var(--line);
+      transition: transform .2s var(--ease), background .2s, box-shadow .2s;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--line); }
+    .theme-toggle svg { width: 17px; height: 17px; }
+    .theme-toggle .ic-sun { display: none; }
+    .theme-toggle .ic-moon { display: block; }
+    :root[data-theme="dark"] .theme-toggle .ic-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .ic-moon { display: none; }
+
+    /* ══ Project "case study" button ═══════════════════════ */
+    .project .p-links .p-case {
+      font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500;
+      padding: 0.55rem 0.95rem; border-radius: 10px;
+      border: 2px solid var(--line); background: var(--surface); color: var(--ink);
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: transform .2s var(--ease), background .25s, color .25s, box-shadow .2s var(--ease);
+    }
+    .project .p-links .p-case:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--line); }
+    .project .p-links .p-case .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      transition: transform .25s var(--ease);
+    }
+    .project .p-links .p-case:hover .dot { transform: scale(1.6); }
+
+    /* ══ Case study dialog ═════════════════════════════════ */
+    .case-modal {
+      border: none; padding: 0; background: transparent; color: var(--ink);
+      width: min(940px, 94vw); max-width: 94vw; max-height: 92svh; margin: auto;
+    }
+    .case-modal::backdrop { background: color-mix(in srgb, var(--ink) 58%, transparent); backdrop-filter: blur(3px); }
+    .case-inner {
+      position: relative;
+      background: var(--surface);
+      border: 2px solid var(--line);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-lg);
+      max-height: 92svh; overflow-y: auto; overscroll-behavior: contain;
+    }
+    .case-media { border-bottom: 2px solid var(--line); background: var(--bg-tint); }
+    .case-media img { width: 100%; max-height: 320px; object-fit: cover; object-position: top center; }
+    .case-content { padding: clamp(1.4rem, 4vw, 2.4rem); display: flex; flex-direction: column; gap: 1.25rem; }
+    .case-meta { display: flex; flex-wrap: wrap; gap: 0.55rem; align-items: center; font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); }
+    .case-meta .dotsep { opacity: 0.5; }
+    .case-badge { padding: 0.25rem 0.6rem; border: 2px solid var(--line); border-radius: 999px; background: var(--accent-3); color: #1a1610; font-weight: 700; letter-spacing: 0.02em; }
+    .case-badge.is-live { background: var(--accent); color: var(--on-accent); }
+    .case-content h3 { font-size: clamp(1.8rem, 4.5vw, 2.9rem); font-weight: 500; margin-top: -0.3rem; }
+    .case-block { display: flex; flex-direction: column; gap: 0.55rem; }
+    .case-h { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); display: inline-flex; align-items: center; gap: 0.55em; }
+    .case-h::before { content: ""; width: 20px; height: 2px; background: var(--accent); }
+    .case-block p { color: var(--ink); font-size: 1.02rem; line-height: 1.5; }
+    .case-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .case-block li { display: flex; gap: 0.6rem; align-items: baseline; font-size: 0.98rem; }
+    .case-block li::before { content: "→"; color: var(--accent); flex-shrink: 0; }
+    .case-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .case-stack span { font-family: var(--font-mono); font-size: 0.72rem; padding: 0.3rem 0.65rem; border: 1.5px solid var(--line); border-radius: 999px; color: var(--muted); }
+    .case-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.3rem; }
+    .case-actions a {
+      font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500;
+      padding: 0.75rem 1.2rem; border-radius: 12px;
+      border: 2px solid var(--line); display: inline-flex; align-items: center; gap: 0.45rem;
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .25s, color .25s;
+    }
+    .case-actions .go { background: var(--accent); color: var(--on-accent); box-shadow: 3px 3px 0 var(--line); }
+    .case-actions .go:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--line); }
+    .case-actions .code { background: var(--bg); }
+    .case-actions .code:hover { background: var(--ink); color: var(--bg); }
+    .case-close {
+      position: absolute; top: 14px; right: 14px; z-index: 3;
+      width: 42px; height: 42px; border-radius: 12px;
+      border: 2px solid var(--line); background: var(--surface); color: var(--ink);
+      display: grid; place-items: center; font-size: 1.15rem;
+      box-shadow: 2px 2px 0 var(--line);
+      transition: transform .2s var(--ease), background .2s, color .2s;
+    }
+    .case-close:hover { transform: translate(-1px, -1px) rotate(90deg); background: var(--accent); color: var(--on-accent); }
+    .case-modal[open] { animation: caseIn .32s var(--ease); }
+    @keyframes caseIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+
     /* ══ Reveal animation ══════════════════════════════════ */
     .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
     .reveal.in { opacity: 1; transform: none; }
@@ -614,6 +716,9 @@
 </head>
 
 <body>
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <!-- Custom cursor -->
   <div class="cursor-ring" aria-hidden="true"></div>
   <div class="cursor-dot" aria-hidden="true"></div>
@@ -633,6 +738,10 @@
         <a class="nav-cta" href="#contact" data-i18n="navCta">Poď do toho →</a>
       </nav>
       <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Prepnúť tému" aria-pressed="false" title="Téma">
+          <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
+        </button>
         <div class="lang-toggle" role="group" aria-label="Jazyk / Language">
           <button type="button" data-lang="sk" class="active" aria-label="Slovenčina">SK</button>
           <button type="button" data-lang="en" aria-label="English">EN</button>
@@ -754,6 +863,7 @@
             <p class="p-desc" data-i18n="pDesc1">Multi-restaurant platforma na objednávanie pizze pre dve prevádzky pod jednou strechou. Výber reštaurácie, menu s filtrami, customizér pizze so živou cenou, košík s kupónmi a celý checkout — end-to-end v prehliadači.</p>
             <div class="p-tags"><span>Next.js</span><span>TypeScript</span><span>E-commerce</span><span>UI/UX</span></div>
             <div class="p-links">
+              <button class="p-case" type="button" data-case="pyro" data-i18n="caseBtn"><span class="dot" aria-hidden="true"></span>Detail →</button>
               <a class="go" href="https://pyro-pizzeria.vercel.app" target="_blank" rel="noopener" data-i18n="goLive">Živá ukážka ↗</a>
               <a class="code" href="https://github.com/DarkMaster9452/Pyro-pizzeria" target="_blank" rel="noopener" data-i18n="codeTxt">Kód →</a>
             </div>
@@ -772,6 +882,7 @@
             <p class="p-desc" data-i18n="pDesc2">Web futbalového klubu na vlastnej doméne. Verejná klubová stránka plus interné moduly pre trénerov, hráčov a rodičov — prihlásenie, oznamy, ankety, tréningy a integrácie na Sportnet a Instagram.</p>
             <div class="p-tags"><span>Full-stack</span><span>Express</span><span>Prisma</span><span>PostgreSQL</span></div>
             <div class="p-links">
+              <button class="p-case" type="button" data-case="osk" data-i18n="caseBtn"><span class="dot" aria-hidden="true"></span>Detail →</button>
               <a class="go" href="https://oskkp.sk" target="_blank" rel="noopener">oskkp.sk ↗</a>
               <a class="code" href="https://github.com/DarkMaster9452/OSK-Kamenna-Poruba-Web" target="_blank" rel="noopener" data-i18n="codeTxt">Kód →</a>
             </div>
@@ -791,15 +902,16 @@
             <p class="p-desc" data-i18n="pDesc3">Oficiálny web futbalového klubu — koncept. Next.js 15, shadcn/ui a Tailwind v4, s Prisma, Neon PostgreSQL a NextAuth prihlásením. Klubové novinky, súpisky, zápasy a admin panel.</p>
             <div class="p-tags"><span>Next.js 15</span><span>shadcn/ui</span><span>Prisma</span><span>NextAuth</span></div>
             <div class="p-links">
+              <button class="p-case" type="button" data-case="fkrajec" data-i18n="caseBtn"><span class="dot" aria-hidden="true"></span>Detail →</button>
               <a class="go" href="https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/" target="_blank" rel="noopener" data-i18n="goLive">Živá ukážka ↗</a>
               <a class="code" href="https://github.com/DarkMaster9452/FK-Rajec-Web-Koncept" target="_blank" rel="noopener" data-i18n="codeTxt">Kód →</a>
             </div>
           </div>
         </article>
 
-        <!-- 04 · Vantra (koncept) — TODO: doplniť reálne odkazy (live + repo) -->
+        <!-- 04 · Vantra (koncept) -->
         <article class="project reveal">
-          <a class="p-shot" href="#" rel="noopener" aria-label="Vantra — náhľad projektu" data-vantra-live>
+          <a class="p-shot" href="https://vantra-six.vercel.app" target="_blank" rel="noopener" aria-label="Otvoriť živú ukážku Vantra">
             <span class="p-concept" data-i18n="concept">Koncept</span>
             <span class="p-live">Live ↗</span>
             <img loading="lazy" alt="Náhľad projektu Vantra" src="assets/vantra.webp" />
@@ -810,8 +922,9 @@
             <p class="p-desc" data-i18n="pDesc4">Koncept streamovacej platformy — rozhranie pre filmy a seriály s cinematickým hero, trending rebríčkami, hodnoteniami a prehliadaním kategórií. Zameraný na plynulý zážitok zo sledovania na úrovni veľkých streamov.</p>
             <div class="p-tags"><span>React</span><span>Streaming</span><span>UI/UX</span><span>Web app</span></div>
             <div class="p-links">
-              <a class="go" href="#" rel="noopener" data-vantra-live data-i18n="goLive">Živá ukážka ↗</a>
-              <a class="code" href="#" rel="noopener" data-vantra-code data-i18n="codeTxt">Kód →</a>
+              <button class="p-case" type="button" data-case="vantra" data-i18n="caseBtn"><span class="dot" aria-hidden="true"></span>Detail →</button>
+              <a class="go" href="https://vantra-six.vercel.app" target="_blank" rel="noopener" data-i18n="goLive">Živá ukážka ↗</a>
+              <a class="code" href="https://github.com/DarkMaster9452/Vantra" target="_blank" rel="noopener" data-i18n="codeTxt">Kód →</a>
             </div>
           </div>
         </article>
@@ -900,10 +1013,7 @@
         </div>
         <div class="c-socials">
           <a href="https://github.com/darkmaster9452" target="_blank" rel="noopener">GitHub ↗</a>
-          <!-- Doplň si vlastné odkazy (nahraď # svojím profilom) -->
-          <a href="#" rel="noopener">LinkedIn ↗</a>
-          <a href="#" rel="noopener">Dribbble ↗</a>
-          <a href="#" rel="noopener">X / Twitter ↗</a>
+          <a href="mailto:strananekm@gmail.com">Email ↗</a>
         </div>
       </div>
     </div>
@@ -919,6 +1029,40 @@
       </div>
     </div>
   </footer>
+
+  <!-- ═══ CASE STUDY DIALOG ═══ -->
+  <dialog class="case-modal" id="caseModal" aria-labelledby="caseTitle">
+    <div class="case-inner">
+      <button class="case-close" id="caseClose" type="button" aria-label="Zavrieť">✕</button>
+      <div class="case-media"><img id="caseImg" src="" alt="" /></div>
+      <div class="case-content">
+        <div class="case-meta">
+          <span class="case-badge" id="caseType"></span>
+          <span id="caseYear"></span>
+          <span class="dotsep">·</span>
+          <span id="caseRole"></span>
+        </div>
+        <h3 id="caseTitle"></h3>
+        <div class="case-block">
+          <span class="case-h" id="caseProblemH"></span>
+          <p id="caseProblem"></p>
+        </div>
+        <div class="case-block">
+          <span class="case-h" id="caseSolutionH"></span>
+          <ul id="caseSolution"></ul>
+        </div>
+        <div class="case-block">
+          <span class="case-h" id="caseStackH"></span>
+          <div class="case-stack" id="caseStack"></div>
+        </div>
+        <div class="case-block">
+          <span class="case-h" id="caseOutcomeH"></span>
+          <p id="caseOutcome"></p>
+        </div>
+        <div class="case-actions" id="caseActions"></div>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -941,11 +1085,33 @@
       var fine = window.matchMedia("(pointer: fine)").matches;
       var root = document.documentElement;
 
-      /* ── Theme from system preference (no manual toggle) ─── */
+      /* ── Theme: system default + manual toggle, persisted ── */
       var storedTheme = null;
       try { storedTheme = localStorage.getItem("theme"); } catch (e) {}
       if (storedTheme) root.setAttribute("data-theme", storedTheme);
       else if (window.matchMedia("(prefers-color-scheme: dark)").matches) root.setAttribute("data-theme", "dark");
+
+      var themeToggle = document.getElementById("themeToggle");
+      function updateThemeLabel() {
+        if (!themeToggle) return;
+        var dark = root.getAttribute("data-theme") === "dark";
+        var en = root.getAttribute("lang") === "en";
+        themeToggle.setAttribute("aria-pressed", dark ? "true" : "false");
+        themeToggle.setAttribute("aria-label", dark
+          ? (en ? "Switch to light theme" : "Prepnúť na svetlú tému")
+          : (en ? "Switch to dark theme" : "Prepnúť na tmavú tému"));
+      }
+      function setTheme(t) {
+        root.setAttribute("data-theme", t);
+        try { localStorage.setItem("theme", t); } catch (e) {}
+        updateThemeLabel();
+      }
+      if (themeToggle) {
+        updateThemeLabel();
+        themeToggle.addEventListener("click", function () {
+          setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+        });
+      }
 
       /* ── i18n ──────────────────────────────────────────── */
       var EN = {
@@ -982,6 +1148,7 @@
         pDesc4: "A streaming platform concept — a movie & TV interface with a cinematic hero, trending rails, ratings and category browsing. Focused on a smooth, big-streaming-grade viewing experience.",
         goLive: "Live demo ↗",
         codeTxt: "Code →",
+        caseBtn: `<span class="dot" aria-hidden="true"></span>Case study →`,
         workMore: `<a href="https://github.com/DarkMaster9452?tab=repositories" target="_blank" rel="noopener">All repositories on GitHub →</a>`,
         servicesH2: "What I can do for you",
         servicesIdx: "03 — services",
@@ -1042,6 +1209,8 @@
           else el.innerHTML = origSK.get(el);
         });
         root.setAttribute("lang", lang);
+        updateThemeLabel();
+        relangCase(lang);
         // badge ring text
         var bp = document.getElementById("badgeTextPath");
         if (bp) bp.textContent = lang === "en" ? "Available for projects · 2026 · " : "Dostupný na projekty · 2026 · ";
@@ -1067,14 +1236,21 @@
       });
       setLang(savedLang === "en" ? "en" : "sk");
 
-      /* ── Nav scrolled state ────────────────────────────── */
+      /* ── Nav scrolled state + scroll progress ──────────── */
       var nav = document.getElementById("nav");
+      var progress = document.getElementById("scrollProgress");
       function onScroll() {
         if (window.scrollY > 20) nav.classList.add("scrolled");
         else nav.classList.remove("scrolled");
+        if (progress) {
+          var h = document.documentElement.scrollHeight - window.innerHeight;
+          var p = h > 0 ? Math.min(1, Math.max(0, window.scrollY / h)) : 0;
+          progress.style.transform = "scaleX(" + p + ")";
+        }
       }
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
 
       /* ── Mobile menu ───────────────────────────────────── */
       var burger = document.getElementById("burger");
@@ -1124,6 +1300,14 @@
           var el = document.getElementById(id); if (el) so.observe(el);
         });
       }
+
+      /* ── Keyboard vs pointer (focus visibility) ────────── */
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Tab") document.body.classList.add("using-keyboard");
+      });
+      window.addEventListener("mousedown", function () {
+        document.body.classList.remove("using-keyboard");
+      });
 
       /* ── Custom cursor (fine pointers) ─────────────────── */
       if (fine && !reduce) {
@@ -1226,6 +1410,141 @@
         }
         sticker.addEventListener("pointerup", endDrag);
         sticker.addEventListener("pointercancel", endDrag);
+      }
+
+      /* ── Case study dialogs ────────────────────────────── */
+      var CASE_LABELS = {
+        sk: { problem: "Problém", solution: "Čo som spravil", stack: "Stack", outcome: "Stav", open: "Živá ukážka ↗", code: "Kód →", close: "Zavrieť", live: "Live", concept: "Koncept" },
+        en: { problem: "Problem", solution: "What I built", stack: "Stack", outcome: "Status", open: "Live demo ↗", code: "Code →", close: "Close", live: "Live", concept: "Concept" }
+      };
+      var CASE_STUDIES = {
+        pyro: {
+          img: "assets/pyro.webp", live: "https://pyro-pizzeria.vercel.app", code: "https://github.com/DarkMaster9452/Pyro-pizzeria", concept: false, year: "2026",
+          sk: {
+            title: "Pyro & Polomárik", role: "Dizajn + full-stack vývoj",
+            problem: "Dve prevádzky pod jednou značkou potrebovali jedno miesto, kde si zákazník vyberie podnik a objedná — bez telefonátov a papierových lístkov.",
+            solution: ["Prepínač medzi dvoma reštauráciami, každá s vlastným menu", "Menu s kategóriami a filtrami", "Customizér pizze so živým prepočtom ceny", "Košík s kupónmi a zľavami", "Kompletný checkout — celý tok end-to-end v prehliadači"],
+            stack: ["Next.js", "TypeScript", "React", "E-commerce", "UI/UX"],
+            outcome: "Funkčná objednávková platforma nasadená na Verceli — od výberu podniku až po odoslanie objednávky."
+          },
+          en: {
+            title: "Pyro & Polomárik", role: "Design + full-stack build",
+            problem: "Two venues under one brand needed a single place for customers to pick a restaurant and order — no phone calls, no paper tickets.",
+            solution: ["A switch between two restaurants, each with its own menu", "A menu with categories and filters", "A pizza customizer with live price calculation", "A cart with coupons and discounts", "A full checkout — the whole flow end-to-end in the browser"],
+            stack: ["Next.js", "TypeScript", "React", "E-commerce", "UI/UX"],
+            outcome: "A working ordering platform deployed on Vercel — from picking a venue to placing the order."
+          }
+        },
+        osk: {
+          img: "assets/osk.webp", live: "https://oskkp.sk", code: "https://github.com/DarkMaster9452/OSK-Kamenna-Poruba-Web", concept: false, year: "2026",
+          sk: {
+            title: "OŠK Kamenná Poruba", role: "Full-stack vývoj",
+            problem: "Futbalový klub potreboval vlastnú doménu — verejnú stránku aj interné nástroje pre trénerov, hráčov a rodičov.",
+            solution: ["Verejná klubová stránka — novinky, tímy, zápasy", "Prihlásenie a interné moduly pre členov", "Oznamy, ankety a plán tréningov", "Integrácie na Sportnet a Instagram"],
+            stack: ["Full-stack", "Node.js", "Express", "Prisma", "PostgreSQL"],
+            outcome: "Nasadené a bežiace na vlastnej doméne oskkp.sk."
+          },
+          en: {
+            title: "OŠK Kamenná Poruba", role: "Full-stack build",
+            problem: "A football club needed its own domain — a public site plus internal tools for coaches, players and parents.",
+            solution: ["A public club site — news, teams, matches", "Login and internal modules for members", "Announcements, polls and a training schedule", "Sportnet and Instagram integrations"],
+            stack: ["Full-stack", "Node.js", "Express", "Prisma", "PostgreSQL"],
+            outcome: "Deployed and running on its own domain, oskkp.sk."
+          }
+        },
+        fkrajec: {
+          img: "assets/fkrajec.webp", live: "https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/", code: "https://github.com/DarkMaster9452/FK-Rajec-Web-Koncept", concept: true, year: "2026",
+          sk: {
+            title: "FK Rajec", role: "Dizajn + vývoj · koncept",
+            problem: "Ako by mohol vyzerať moderný oficiálny web futbalového klubu, postavený na dnešnom stacku?",
+            solution: ["Klubové novinky, súpisky a rozpis zápasov", "Admin panel na správu obsahu", "Prihlásenie cez NextAuth", "Dáta cez Prisma + Neon PostgreSQL"],
+            stack: ["Next.js 15", "shadcn/ui", "Tailwind v4", "Prisma", "Neon", "NextAuth"],
+            outcome: "Funkčný koncept nasadený na GitHub Pages."
+          },
+          en: {
+            title: "FK Rajec", role: "Design + build · concept",
+            problem: "What could a modern official football-club website look like, built on today's stack?",
+            solution: ["Club news, rosters and a match schedule", "An admin panel for managing content", "Login via NextAuth", "Data through Prisma + Neon PostgreSQL"],
+            stack: ["Next.js 15", "shadcn/ui", "Tailwind v4", "Prisma", "Neon", "NextAuth"],
+            outcome: "A working concept deployed on GitHub Pages."
+          }
+        },
+        vantra: {
+          img: "assets/vantra.webp", live: "https://vantra-six.vercel.app", code: "https://github.com/DarkMaster9452/Vantra", concept: true, year: "2026",
+          sk: {
+            title: "Vantra", role: "Dizajn + vývoj · koncept",
+            problem: "Skúmanie rozhrania streamovacej platformy na úrovni veľkých hráčov — ako spraviť plynulý zážitok z prehliadania filmov a seriálov.",
+            solution: ["Cinematický hero a trending rebríčky", "Hodnotenia a prehliadanie podľa kategórií", "Metadáta z TMDB a AniList API", "Animácie cez Framer Motion, prihlásenie cez Supabase"],
+            stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Framer Motion", "Supabase"],
+            outcome: "Edukačný koncept — vývoj je momentálne pozastavený, živé demo je dostupné."
+          },
+          en: {
+            title: "Vantra", role: "Design + build · concept",
+            problem: "Exploring a big-streaming-grade interface — how to make browsing movies and shows feel smooth.",
+            solution: ["A cinematic hero and trending rails", "Ratings and category browsing", "Metadata from the TMDB and AniList APIs", "Animation via Framer Motion, login via Supabase"],
+            stack: ["Next.js 16", "TypeScript", "Tailwind CSS", "Framer Motion", "Supabase"],
+            outcome: "An educational concept — development is currently on hold; the live demo is available."
+          }
+        }
+      };
+
+      var caseModal = document.getElementById("caseModal");
+      var currentCaseKey = null;
+
+      function fillList(el, arr) {
+        el.innerHTML = "";
+        arr.forEach(function (txt) { var li = document.createElement("li"); li.textContent = txt; el.appendChild(li); });
+      }
+      function fillTags(el, arr) {
+        el.innerHTML = "";
+        arr.forEach(function (txt) { var s = document.createElement("span"); s.textContent = txt; el.appendChild(s); });
+      }
+      function renderCase(key, lang) {
+        var d = CASE_STUDIES[key]; if (!d) return;
+        var t = d[lang] || d.sk;
+        var L = CASE_LABELS[lang] || CASE_LABELS.sk;
+        var img = document.getElementById("caseImg");
+        img.src = d.img; img.alt = t.title;
+        var type = document.getElementById("caseType");
+        type.textContent = d.concept ? L.concept : L.live;
+        type.classList.toggle("is-live", !d.concept);
+        document.getElementById("caseYear").textContent = d.year;
+        document.getElementById("caseRole").textContent = t.role;
+        document.getElementById("caseTitle").textContent = t.title;
+        document.getElementById("caseProblemH").textContent = L.problem;
+        document.getElementById("caseProblem").textContent = t.problem;
+        document.getElementById("caseSolutionH").textContent = L.solution;
+        fillList(document.getElementById("caseSolution"), t.solution);
+        document.getElementById("caseStackH").textContent = L.stack;
+        fillTags(document.getElementById("caseStack"), t.stack);
+        document.getElementById("caseOutcomeH").textContent = L.outcome;
+        document.getElementById("caseOutcome").textContent = t.outcome;
+        var act = document.getElementById("caseActions");
+        act.innerHTML = "";
+        var go = document.createElement("a");
+        go.className = "go"; go.href = d.live; go.target = "_blank"; go.rel = "noopener"; go.textContent = L.open;
+        var code = document.createElement("a");
+        code.className = "code"; code.href = d.code; code.target = "_blank"; code.rel = "noopener"; code.textContent = L.code;
+        act.appendChild(go); act.appendChild(code);
+        document.getElementById("caseClose").setAttribute("aria-label", L.close);
+      }
+      function relangCase(lang) {
+        if (caseModal && caseModal.open && currentCaseKey) renderCase(currentCaseKey, lang);
+      }
+      if (caseModal) {
+        document.querySelectorAll(".p-case").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentCaseKey = btn.getAttribute("data-case");
+            renderCase(currentCaseKey, currentLang);
+            if (typeof caseModal.showModal === "function") caseModal.showModal();
+            else caseModal.setAttribute("open", "");
+            document.body.style.overflow = "hidden";
+            var inner = caseModal.querySelector(".case-inner"); if (inner) inner.scrollTop = 0;
+          });
+        });
+        document.getElementById("caseClose").addEventListener("click", function () { caseModal.close(); });
+        caseModal.addEventListener("click", function (e) { if (e.target === caseModal) caseModal.close(); });
+        caseModal.addEventListener("close", function () { document.body.style.overflow = ""; currentCaseKey = null; });
       }
     })();
   </script>
