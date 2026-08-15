@@ -78,6 +78,12 @@ pretože Facebook, X ani LinkedIn SVG náhľady nezobrazujú.
 rsvg-convert -w 1200 -h 630 og.svg -o og.png
 ```
 
+> **Poznámka k písmu:** `og.svg` používa `font-family="sans-serif"` a `"monospace"`,
+> nie Space Grotesk — aby sa karta dala vyrenderovať kdekoľvek bez inštalácie fontu.
+> Súčasné `og.png` je vyrenderované so systémovým sans-serifom. Ak chceš kartu presne
+> v písme webu, nainštaluj si lokálne **Space Grotesk** a **JetBrains Mono**, v `og.svg`
+> prepíš `font-family` na `"Space Grotesk"` / `"JetBrains Mono"` a vyrenderuj PNG nanovo.
+
 ---
 
 ## Jazyky (SK / EN)
