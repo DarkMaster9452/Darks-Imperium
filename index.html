@@ -89,7 +89,14 @@
 
     *, *::before, *::after { box-sizing: border-box; }
 
-    html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px); }
+    html {
+      scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 24px);
+      -webkit-text-size-adjust: 100%;   /* iOS neprepočítava text na šírku */
+    }
+
+    /* Nič nesmie pretiecť do strán — obrázky, médiá a dlhé slová. */
+    img, svg, video, canvas, iframe { max-width: 100%; }
+    h1, h2, h3, h4, p, li, figcaption, blockquote { overflow-wrap: break-word; }
 
     body {
       margin: 0;
@@ -144,7 +151,9 @@
 
     /* ── Typografia ── */
     h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 600; letter-spacing: -0.035em; line-height: 1.02; margin: 0; }
-    h1 { font-size: clamp(2.4rem, 4.9vw, 4.5rem); font-weight: 600; }
+    /* sklon + offset: plynulá krivka od telefónu po monitor,
+       bez skokov a bez zbytočného zväčšenia na desktope */
+    h1 { font-size: clamp(2.1rem, 3vw + 1.7rem, 4.4rem); font-weight: 600; }
     h2 { font-size: clamp(2rem, 4.4vw, 3.5rem); }
     h3 { font-size: clamp(1.2rem, 1.8vw, 1.5rem); letter-spacing: -0.025em; }
     p { margin: 0 0 1.1rem; color: var(--text-2); }
@@ -185,14 +194,15 @@
       backdrop-filter: blur(16px) saturate(150%);
       border-bottom-color: var(--line);
     }
-    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
-    .brand { display: inline-flex; align-items: center; gap: 12px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
     .brand .mark { width: 34px; height: 34px; display: block; flex: none; transition: transform .5s var(--ease); }
     .brand:hover .mark { transform: rotate(-90deg); }
     .brand .mark svg { width: 100%; height: 100%; display: block; }
     .brand-name {
-      font-weight: 600; font-size: 0.95rem; letter-spacing: -0.02em; line-height: 1.15; white-space: nowrap;
+      font-weight: 600; font-size: 0.95rem; letter-spacing: -0.02em; line-height: 1.15;
+      white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis;
     }
     .brand-name small {
       display: block; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 400;
@@ -224,7 +234,7 @@
       box-shadow: 0 0 24px -6px var(--red-glow);
     }
 
-    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-right { display: flex; align-items: center; gap: 10px; flex: none; }
 
     .lang-toggle {
       display: inline-flex; border: 1px solid var(--line); background: var(--ink-900);
@@ -253,7 +263,7 @@
 
     .mobile-menu {
       position: fixed; inset: var(--nav-h) 0 auto 0; z-index: 79;
-      background: rgba(7, 6, 11, 0.97);
+      background: var(--void);
       -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--line);
       display: flex; flex-direction: column; padding: 12px var(--pad) 28px;
@@ -351,12 +361,12 @@
       padding-bottom: 14px; margin-bottom: 6px; border-bottom: 1px solid var(--line); position: relative;
     }
     .hud-row {
-      display: flex; justify-content: space-between; align-items: center; gap: 14px;
+      display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
       padding: 11px 0; border-bottom: 1px solid var(--line-soft); position: relative;
     }
     .hud-row:last-child { border-bottom: 0; padding-bottom: 0; }
     .hud-k { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-    .hud-v { font-size: 0.85rem; font-weight: 500; color: var(--text); text-align: right; }
+    .hud-v { font-size: 0.85rem; font-weight: 500; color: var(--text); text-align: right; min-width: 0; }
     .hud-v.ok { color: var(--red-400); display: inline-flex; align-items: center; gap: 8px; }
 
     /* ═══ TICKER ═══ */
@@ -379,7 +389,7 @@
     .about-copy p:first-child { font-size: clamp(1.15rem, 1.5vw, 1.4rem); color: var(--text); letter-spacing: -0.02em; line-height: 1.5; }
     .name-line { color: var(--red-400); font-weight: 600; }
 
-    .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
     .fact { background: var(--ink-900); padding: 26px 20px; transition: background .35s var(--ease); }
     .fact:hover { background: var(--ink-700); }
     .fact .num {
@@ -392,7 +402,10 @@
     .work-note { max-width: 62ch; margin-bottom: clamp(32px, 4vw, 52px); }
     .work-note em { color: var(--red-400); font-style: normal; font-weight: 500; }
 
-    .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 26px; }
+    /* Explicitné stopy namiesto auto-fit: počet stĺpcov je predvídateľný a minmax(0,1fr)
+       zaručí, že žiadny obsah nikdy nerozšíri stopu nad šírku obrazovky. */
+    .work-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 26px; }
+    @media (min-width: 760px) { .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
     .project {
       position: relative; border: 1px solid var(--line); background: var(--ink-800);
@@ -462,7 +475,8 @@
     .work-more a:hover { color: var(--red-400); border-color: var(--red); }
 
     /* ═══ SLUŽBY ═══ */
-    .cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    .cards-3 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+    @media (min-width: 900px) { .cards-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     .svc { background: var(--ink-900); padding: 34px 28px 32px; position: relative; overflow: hidden; transition: background .4s var(--ease); }
     .svc::before {
       content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -621,23 +635,81 @@
     .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
     .reveal.in { opacity: 1; transform: none; }
 
-    /* ═══ RESPONZÍVNE ═══ */
-    @media (max-width: 1000px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .hud { max-width: 460px; }
-      .about-grid { grid-template-columns: 1fr; }
+    /* ═══════════════════════════════════════════════════════════
+       RESPONZÍVNE — rebrík od veľkých monitorov po malé telefóny.
+       Pravidlo: stránka sa NIKDY nesmie dať posúvať do strán.
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ── Tablet na šírku / malý laptop ── */
+    @media (max-width: 1100px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hud { max-width: 480px; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .facts { max-width: 520px; }
     }
-    @media (max-width: 860px) {
+
+    /* ── Tablet na výšku — navigácia sa skladá do menu ── */
+    @media (max-width: 900px) {
       .nav-links { display: none; }
       .burger { display: block; }
       .brand-name { font-size: 0.9rem; }
+      .case-media { aspect-ratio: 16 / 9; }
     }
-    @media (max-width: 520px) {
+
+    /* ── Veľký telefón ── */
+    @media (max-width: 680px) {
+      .sec { padding: clamp(64px, 13vw, 96px) 0; }
+      .sec-head { margin-bottom: 34px; }
+      .work-note, .stack-note { margin-bottom: 28px; }
+      .contact { padding: 44px 22px; }
+      .case-content { padding: 24px 20px; }
+      .case-actions a { flex: 1 1 auto; text-align: center; }
+      .foot-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
+
+    /* ── Bežný telefón ── */
+    @media (max-width: 560px) {
       .brand-name small { display: none; }
-      .eyebrow { font-size: 0.62rem; letter-spacing: 0.13em; }
-      .facts { grid-template-columns: 1fr; }
+      .eyebrow { font-size: 0.62rem; letter-spacing: 0.12em; align-items: flex-start; }
+      .eyebrow .pulse { margin-top: 6px; }
       .btn { width: 100%; justify-content: center; }
-      .hero-actions { flex-direction: column; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hud { max-width: none; padding: 22px 18px; }
+      .p-body { padding: 22px 18px 20px; }
+      .c-mail { width: 100%; justify-content: center; word-break: break-all; }
+      .ticker-track { gap: 30px; }
+      .ticker-track span { gap: 30px; }
+    }
+
+    /* ── Malý telefón (iPhone SE a užšie) ── */
+    @media (max-width: 400px) {
+      .brand .mark { width: 30px; height: 30px; }
+      .brand { gap: 9px; }
+      .brand-name { font-size: 0.76rem; letter-spacing: -0.03em; }
+      .lang-toggle button { padding: 6px 8px; font-size: 0.62rem; }
+      .burger { width: 34px; height: 34px; }
+      .facts { grid-template-columns: 1fr; }
+      .p-links { gap: 6px; }
+      .p-case, .p-links .go, .p-links .code { padding: 9px 10px; font-size: 0.62rem; letter-spacing: 0.06em; }
+      .case-close { top: 10px; right: 10px; width: 34px; height: 34px; }
+    }
+
+    /* ── Dotykové zariadenia: väčšie ciele na prsty (min. ~44px) ── */
+    @media (pointer: coarse) {
+      .p-case, .p-links .go, .p-links .code, .c-socials a, .case-actions a {
+        min-height: 44px; align-items: center;
+      }
+      .tag { min-height: 42px; }
+      .navlink, .mobile-menu a { min-height: 44px; display: flex; align-items: center; }
+      .to-top, .work-more a { display: inline-flex; min-height: 44px; align-items: center; }
+    }
+
+    /* ── Telefón na šírku (nízka výška): menej vertikálneho priestoru ── */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .hero { padding-top: calc(var(--nav-h) + 32px); padding-bottom: 40px; }
+      .sec { padding: 60px 0; }
+      .mobile-menu { overflow-y: auto; max-height: calc(100dvh - var(--nav-h)); }
+      .mobile-menu a { padding: 11px 0; font-size: 1.15rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
