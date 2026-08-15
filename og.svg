@@ -1,28 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
-  <rect width="1200" height="630" fill="#efe7d6"/>
-  <rect x="16" y="16" width="1168" height="598" rx="28" fill="none" stroke="#1a1610" stroke-width="4"/>
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F01F3D"/><stop offset="1" stop-color="#7E0A20"/>
+    </linearGradient>
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0V72" fill="none" stroke="#17131F" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glowA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#F01F3D" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#F01F3D" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7E0A20" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#7E0A20" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F01F3D"/><stop offset="1" stop-color="#F01F3D" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
 
-  <!-- badge -->
-  <g transform="translate(1000,150)">
-    <circle r="82" fill="#e6421f" stroke="#1a1610" stroke-width="4"/>
-    <text x="0" y="18" font-family="Georgia, serif" font-size="52" font-weight="700" font-style="italic"
-          text-anchor="middle" fill="#fff7ef">MS</text>
+  <rect width="1200" height="630" fill="#07060B"/>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.85"/>
+  <ellipse cx="1080" cy="60" rx="520" ry="420" fill="url(#glowA)"/>
+  <ellipse cx="90" cy="600" rx="440" ry="360" fill="url(#glowB)"/>
+
+  <!-- logo -->
+  <g transform="translate(80,74) scale(1.7)">
+    <path d="M8 1H39V32L32 39H1V8Z" fill="#12101A" stroke="url(#frame)" stroke-width="2"/>
+    <g fill="none" stroke-linecap="butt" stroke-width="2.9">
+      <path d="M5.5 28.5V12l6 8L17.5 12v16.5" stroke="#FFFFFF"/>
+      <path d="M34.5 15 32 12.5H23.5L21 15v2.6l2.5 2.5h8.5l2.5 2.5v3L32 28.1h-8.5L21 25.6" stroke="#F01F3D"/>
+    </g>
   </g>
 
-  <text x="80" y="150" font-family="'JetBrains Mono', monospace" font-size="26" letter-spacing="6"
-        fill="#6a6250">FRONTEND &amp; FULL-STACK DEVELOPER · SK</text>
+  <text x="163" y="118" font-family="monospace" font-size="21" letter-spacing="4.6" fill="#7C7590">MARTIN STRAŇANEK</text>
 
-  <text x="76" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="118" font-weight="700"
-        fill="#1a1610">Martin Straňanek</text>
+  <rect x="80" y="212" width="120" height="2" fill="url(#rule)"/>
 
-  <text x="80" y="410" font-family="Georgia, serif" font-size="60" font-style="italic" fill="#e6421f">
-    Weby, ktoré sú hravé —
-  </text>
-  <text x="80" y="480" font-family="Georgia, serif" font-size="60" font-weight="600" fill="#1a1610">
-    a fungujú bezchybne.
-  </text>
+  <text x="80" y="316" font-family="sans-serif" font-size="92" font-weight="700" letter-spacing="-3.5" fill="#EDEAF5">Weby, ktoré sú presné.</text>
+  <text x="80" y="420" font-family="sans-serif" font-size="92" font-weight="700" letter-spacing="-3.5" fill="#F01F3D">A fungujú bezchybne.</text>
 
-  <text x="80" y="580" font-family="'JetBrains Mono', monospace" font-size="24" fill="#6a6250">
-    darkmaster9452.github.io/idk
-  </text>
+  <text x="80" y="512" font-family="sans-serif" font-size="30" fill="#B3ADC4">Frontend &amp; full-stack developer · Slovensko</text>
+
+  <rect x="80" y="560" width="1040" height="1" fill="#241F33"/>
+  <text x="80" y="600" font-family="monospace" font-size="19" letter-spacing="3.4" fill="#7C7590">DIZAJN · VÝVOJ · ANIMÁCIE · VÝKON</text>
+  <text x="1120" y="600" text-anchor="end" font-family="monospace" font-size="19" letter-spacing="3.4" fill="#F01F3D">◆ 2026</text>
 </svg>
