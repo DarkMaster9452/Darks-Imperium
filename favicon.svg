@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="15" fill="#e6421f"/>
-  <rect x="4" y="4" width="56" height="56" rx="12" fill="none" stroke="#1a1610" stroke-width="3"/>
-  <text x="32" y="44" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="700"
-        text-anchor="middle" fill="#fff7ef" font-style="italic">MS</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="64" height="64">
+  <!-- Martin Straňanek — monogram MS (M v bielej, hranaté S v Ember červenej) -->
+  <defs>
+    <linearGradient id="f" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F01F3D"/><stop offset="1" stop-color="#7E0A20"/>
+    </linearGradient>
+  </defs>
+  <path d="M8 1H39V32L32 39H1V8Z" fill="#12101A" stroke="url(#f)" stroke-width="2"/>
+  <g fill="none" stroke-linecap="butt" stroke-width="2.9">
+    <path d="M5.5 28.5V12l6 8L17.5 12v16.5" stroke="#FFFFFF"/>
+    <path d="M34.5 15 32 12.5H23.5L21 15v2.6l2.5 2.5h8.5l2.5 2.5v3L32 28.1h-8.5L21 25.6" stroke="#F01F3D"/>
+  </g>
 </svg>
