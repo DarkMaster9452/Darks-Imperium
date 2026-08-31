@@ -158,7 +158,17 @@ Vercel projekt **`strananekm`** je napojený na tento repozitár, Astro si nájd
 V *Settings → Environment Variables* musia byť `DATABASE_URL` a `GUESTBOOK_SALT`.
 
 Doména `strananekm.com` je nastavená ako `site` v `astro.config.mjs` — z nej sa
-odvodzuje `canonical`, `og:url`, `og:image` aj `hreflang`.
+odvodzuje `canonical`, `og:url`, `og:image`, `hreflang` aj sitemap.
+
+### Indexovanie
+
+`@astrojs/sitemap` generuje pri builde `sitemap-index.xml` a `sitemap-0.xml` so
+všetkými statickými stránkami (18 URL — obe jazykové verzie). Vďaka `i18n`
+nastaveniu má každá URL `hreflang` odkaz na svoj náprotivok, takže Google
+slovenskú a anglickú verziu spáruje a neberie ich ako duplicitu.
+
+`public/robots.txt` na sitemap odkazuje a zakazuje `/api/`. Po nasadení stačí
+sitemapu raz odovzdať v Google Search Console.
 
 ---
 
