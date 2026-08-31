@@ -1,6 +1,6 @@
 ---
 import Panel from "../Panel.astro";
-import { useTranslations, type Lang } from "../../i18n/utils";
+import { useTranslations, localizePath, type Lang } from "../../i18n/utils";
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -15,16 +15,9 @@ const stamp = new Intl.DateTimeFormat(lang === "sk" ? "sk-SK" : "en-GB", {
 }).format(updated);
 ---
 
-<Panel class="now" pad="18px">
+<Panel href={localizePath("/now", lang)} label={t("nowTitle")} class="now" pad="18px">
   <div class="head">
-    <h2 class="tile-title">
-      {t("nowTitle")}
-      <a
-        class="what"
-        href="https://nownownow.com/about"
-        target="_blank"
-        rel="noopener">{t("nowWhat")}</a>
-    </h2>
+    <h2 class="tile-title">{t("nowTitle")}</h2>
     <p class="stamp">
       {stamp}
       <span class="dot" aria-hidden="true"></span>
@@ -32,6 +25,11 @@ const stamp = new Intl.DateTimeFormat(lang === "sk" ? "sk-SK" : "en-GB", {
   </div>
 
   <p class="text">{t("nowText")}</p>
+
+  <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7"></path>
+    <path d="M8 7h9v9"></path>
+  </svg>
 </Panel>
 
 <style>
@@ -41,14 +39,21 @@ const stamp = new Intl.DateTimeFormat(lang === "sk" ? "sk-SK" : "en-GB", {
     justify-content: space-between;
     gap: 12px;
     margin-bottom: 8px;
+    padding-right: 20px;
   }
 
-  .what {
-    margin-left: 6px;
-    font-family: var(--font-mono);
-    font-size: 9px;
-    font-weight: 400;
-    color: var(--muted);
+  .arrow {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 14px;
+    height: 14px;
+    color: var(--text-2);
+    transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+  :global(.panel:hover) .arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
   }
 
   .stamp {

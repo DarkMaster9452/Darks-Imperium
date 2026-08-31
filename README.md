@@ -50,6 +50,7 @@ public/                   screenshoty, favicon, og.png, sprites/
 | `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `dravio`, `vantra`) |
 | `/guestbook` | `/en/guestbook` | návštevná kniha |
 | `/cv` | `/en/cv` | životopis + kontaktný formulár |
+| `/now` | `/en/now` | now stránka — dostupnosť a čo práve robím |
 
 ---
 
@@ -158,6 +159,21 @@ V *Settings → Environment Variables* musia byť `DATABASE_URL` a `GUESTBOOK_SA
 
 Doména `strananekm.com` je nastavená ako `site` v `astro.config.mjs` — z nej sa
 odvodzuje `canonical`, `og:url`, `og:image` aj `hreflang`.
+
+---
+
+## Now stránka
+
+`/now` je stránka v štýle [nownownow.com](https://nownownow.com/about): čo mám
+rozrobené, čo sa učím a hlavne **že prijímam projekty** — čo beriem, čo je v cene
+a ako spolupráca prebieha. Vedie na ňu dlaždica „Práve teraz" z dosky.
+
+Texty sú v `src/i18n/` pod kľúčmi `now*`. Zoznamy (`nowOpenList`, `nowIncludedList`)
+sú jeden reťazec s položkami oddelenými zvislicou `|`.
+
+> Now stránka má cenu len vtedy, keď je čerstvá. Keď meníš `nowWorkingP` alebo
+> `nowLearningP`, prepíš aj dátum `updated` v `src/pages/[...lang]/now.astro`
+> a v `src/components/tiles/Now.astro`.
 
 ---
 

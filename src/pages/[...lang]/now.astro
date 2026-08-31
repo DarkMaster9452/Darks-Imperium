@@ -1,0 +1,238 @@
+---
+import SubPage from "../../layouts/SubPage.astro";
+import Panel from "../../components/Panel.astro";
+import { langStaticPaths, useTranslations, localizePath, type Lang } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return langStaticPaths();
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+
+/**
+ * Dátum poslednej úpravy tejto stránky. Now stránka má zmysel len vtedy, keď je
+ * čerstvá — meň ho vždy, keď v i18n meníš texty `nowWorkingP` alebo `nowLearningP`.
+ */
+const updated = new Date("2026-08-31");
+const stamp = new Intl.DateTimeFormat(lang === "sk" ? "sk-SK" : "en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(updated);
+
+/** Zoznamy sú v slovníku ako jeden reťazec oddelený zvislicou. */
+const split = (value: string) => value.split("|");
+
+const steps = [
+  { h: t("nowProcess1H"), p: t("nowProcess1P") },
+  { h: t("nowProcess2H"), p: t("nowProcess2P") },
+  { h: t("nowProcess3H"), p: t("nowProcess3P") },
+  { h: t("nowProcess4H"), p: t("nowProcess4P") },
+];
+---
+
+<SubPage lang={lang} path="/now" title={t("nowPageTitle")} subtitle={t("nowPageSub")}>
+  <div class="now">
+    <p class="stamp">
+      <span class="dot" aria-hidden="true"></span>
+      {t("nowUpdated")} {stamp}
+    </p>
+
+    <!-- Prijímam projekty — kvôli tomu na stránku ľudia chodia, tak je hore. -->
+    <Panel class="open" pad="clamp(20px, 4vw, 32px)">
+      <h2>{t("nowOpenH")}</h2>
+      <p class="lead">{t("nowOpenP")}</p>
+
+      <ul class="ticks">
+        {split(t("nowOpenList")).map((item) => (
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 12.5 4.5 4.5L19 7.5"></path>
+            </svg>
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      <div class="cta">
+        <a class="btn primary" href="mailto:strananekm@gmail.com">{t("nowCta")}</a>
+        <a class="btn" href={localizePath("/work", lang)}>{t("nowCtaWork")} →</a>
+      </div>
+    </Panel>
+
+    <div class="pair">
+      <Panel pad="clamp(18px, 3vw, 26px)">
+        <h2>{t("nowWorkingH")}</h2>
+        <p>{t("nowWorkingP")}</p>
+      </Panel>
+
+      <Panel pad="clamp(18px, 3vw, 26px)">
+        <h2>{t("nowLearningH")}</h2>
+        <p>{t("nowLearningP")}</p>
+      </Panel>
+    </div>
+
+    <Panel pad="clamp(20px, 4vw, 32px)">
+      <h2>{t("nowIncludedH")}</h2>
+      <ul class="ticks two">
+        {split(t("nowIncludedList")).map((item) => (
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 12.5 4.5 4.5L19 7.5"></path>
+            </svg>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </Panel>
+
+    <Panel pad="clamp(20px, 4vw, 32px)">
+      <h2>{t("nowProcessH")}</h2>
+      <ol class="steps">
+        {steps.map((step, i) => (
+          <li>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3>{step.h}</h3>
+              <p>{step.p}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Panel>
+
+    <p class="foot">
+      <a href="https://nownownow.com/about" target="_blank" rel="noopener">{t("nowWhatIs")}</a>
+      <span aria-hidden="true"> · </span>
+      <span>{t("nowCtaSub")}</span>
+    </p>
+  </div>
+</SubPage>
+
+<style>
+  .now {
+    display: grid;
+    gap: var(--gap);
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .stamp {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.15);
+  }
+
+  h2 {
+    margin-bottom: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  p { color: var(--text-2); }
+  .lead { color: var(--text); }
+
+  /* Karta s dostupnosťou má akcentový rámik, nech je jasné, kam sa pozerať. */
+  .open { border-color: var(--accent-line); }
+
+  .ticks {
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ticks.two { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+
+  .ticks li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 9px;
+    align-items: start;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .ticks svg {
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    color: var(--accent);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    transition:
+      background var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+  .btn:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn.primary {
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn.primary:hover { opacity: 0.88; }
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--gap);
+  }
+  .pair p { font-size: 13px; }
+
+  .steps {
+    display: grid;
+    gap: 16px;
+    margin-top: 4px;
+  }
+  .steps li {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    transition: color var(--dur) var(--ease);
+  }
+  .steps h3 { font-size: 13px; font-weight: 600; }
+  .steps p { margin-top: 2px; font-size: 13px; }
+
+  .foot {
+    font-size: 12px;
+    text-align: center;
+    color: var(--muted);
+  }
+</style>
