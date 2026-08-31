@@ -1,0 +1,423 @@
+---
+import SubPage from "../../layouts/SubPage.astro";
+import Panel from "../../components/Panel.astro";
+import { langStaticPaths, useTranslations, type Lang } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return langStaticPaths();
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+
+/** Chybové hlášky pre klientský skript — kľúč z API → text. */
+const errors = {
+  name: t("gbErrName"),
+  message: t("gbErrMessage"),
+  url: t("gbErrUrl"),
+  rate: t("gbErrRate"),
+  generic: t("gbErrGeneric"),
+  offline: t("gbOffline"),
+};
+
+const labels = {
+  empty: t("gbEmpty"),
+  count: t("gbCount"),
+  sending: t("gbSending"),
+  send: t("gbSend"),
+  thanks: t("gbThanks"),
+};
+---
+
+<SubPage lang={lang} path="/guestbook" title={t("gbTitle")} subtitle={t("gbSub")}>
+  <div
+    class="guestbook"
+    data-guestbook
+    data-lang={lang}
+    data-errors={JSON.stringify(errors)}
+    data-labels={JSON.stringify(labels)}
+  >
+    <Panel class="form-card" pad="18px">
+      <details>
+        <summary>
+          <span>{t("gbLeave")}</span>
+          <span class="chev" aria-hidden="true">→</span>
+        </summary>
+
+        <form data-gb-form novalidate>
+          <div class="fields">
+            <label>
+              <span class="eyebrow">{t("gbName")} *</span>
+              <input name="name" type="text" maxlength="40" required placeholder={t("gbNamePh")} />
+            </label>
+            <label>
+              <span class="eyebrow">{t("gbWebsite")}</span>
+              <input name="website" type="url" maxlength="120" placeholder={t("gbWebsitePh")} />
+            </label>
+          </div>
+
+          <label class="full">
+            <span class="eyebrow">{t("gbMessage")} *</span>
+            <textarea name="message" rows="3" maxlength="400" required placeholder={t("gbMessagePh")}
+            ></textarea>
+          </label>
+
+          {/* Pasca na roboty — pre človeka neviditeľná a mimo poradia tabulátora. */}
+          <label class="pot" aria-hidden="true">
+            Company
+            <input name="company" type="text" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <div class="row">
+            <p class="msg" data-gb-msg role="status"></p>
+            <button type="submit" class="send">{t("gbSend")}</button>
+          </div>
+        </form>
+      </details>
+    </Panel>
+
+    <p class="count"><span data-gb-count>—</span> {t("gbCount")}</p>
+
+    <ul class="entries" data-gb-list></ul>
+
+    <nav class="pager" data-gb-pager hidden>
+      <button type="button" data-gb-prev>← {t("gbPrev")}</button>
+      <span data-gb-page></span>
+      <button type="button" data-gb-next>{t("gbNext")} →</button>
+    </nav>
+  </div>
+</SubPage>
+
+<style>
+  .guestbook { max-width: 760px; margin-inline: auto; }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .chev { color: var(--muted); transition: transform var(--dur) var(--ease); }
+  details[open] .chev { transform: rotate(90deg); }
+
+  form { margin-top: 16px; }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  label { display: block; }
+  label .eyebrow { display: block; margin-bottom: 5px; }
+  .full { margin-top: 12px; }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+  }
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+  }
+  input::placeholder,
+  textarea::placeholder { color: var(--muted); }
+
+  /* Honeypot — schované tak, aby ho čítačky ani tabulátor nenašli. */
+  .pot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .msg { font-size: 12px; color: var(--text-2); }
+  .msg[data-kind="error"] { color: var(--accent); }
+
+  .send {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: opacity var(--dur) var(--ease);
+  }
+  .send:hover { opacity: 0.88; }
+  .send:disabled { opacity: 0.5; cursor: default; }
+
+  .count {
+    margin: 26px 0 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--gap);
+  }
+
+  .pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .pager button {
+    padding: 5px 12px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .pager button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .pager button:disabled { opacity: 0.35; cursor: default; }
+</style>
+
+<style is:global>
+  /* Karty odkazov sa vytvárajú v JS, preto musia byť štýly globálne. */
+  .gb-entry {
+    padding: 14px 16px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition: border-color var(--dur) var(--ease);
+  }
+  .gb-entry:hover { border-color: var(--accent); }
+
+  .gb-entry .gb-text {
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .gb-entry footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .gb-avatar {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .gb-notice {
+    grid-column: 1 / -1;
+    font-size: 13px;
+    color: var(--text-2);
+    text-align: center;
+  }
+
+  .gb-name { font-size: 12px; font-weight: 600; }
+  .gb-name a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .gb-time { font-family: var(--font-mono); font-size: 9px; color: var(--muted); }
+</style>
+
+<script>
+  interface Entry {
+    id: number;
+    name: string;
+    website: string | null;
+    message: string;
+    created_at: string;
+  }
+
+  function setupGuestbook() {
+    const root = document.querySelector<HTMLElement>("[data-guestbook]");
+    if (!root) return;
+
+    const lang = root.dataset.lang === "en" ? "en" : "sk";
+    const errors = JSON.parse(root.dataset.errors ?? "{}") as Record<string, string>;
+    const labels = JSON.parse(root.dataset.labels ?? "{}") as Record<string, string>;
+
+    const list = root.querySelector<HTMLUListElement>("[data-gb-list]")!;
+    const countEl = root.querySelector<HTMLElement>("[data-gb-count]")!;
+    const pager = root.querySelector<HTMLElement>("[data-gb-pager]")!;
+    const pageEl = root.querySelector<HTMLElement>("[data-gb-page]")!;
+    const prev = root.querySelector<HTMLButtonElement>("[data-gb-prev]")!;
+    const next = root.querySelector<HTMLButtonElement>("[data-gb-next]")!;
+    const form = root.querySelector<HTMLFormElement>("[data-gb-form]")!;
+    const msg = root.querySelector<HTMLElement>("[data-gb-msg]")!;
+
+    let page = 1;
+    let totalPages = 1;
+
+    const rtf = new Intl.RelativeTimeFormat(lang === "sk" ? "sk" : "en", { numeric: "auto" });
+
+    function ago(iso: string): string {
+      const diff = Date.now() - new Date(iso).getTime();
+      const mins = Math.round(diff / 60000);
+      if (mins < 60) return rtf.format(-mins, "minute");
+      const hours = Math.round(mins / 60);
+      if (hours < 24) return rtf.format(-hours, "hour");
+      const days = Math.round(hours / 24);
+      if (days < 30) return rtf.format(-days, "day");
+      return rtf.format(-Math.round(days / 30), "month");
+    }
+
+    /** Všetko cez textContent — obsah od návštevníkov sa nikdy nevkladá ako HTML. */
+    function render(entry: Entry): HTMLLIElement {
+      const li = document.createElement("li");
+      li.className = "gb-entry";
+
+      const text = document.createElement("p");
+      text.className = "gb-text";
+      text.textContent = entry.message;
+
+      const foot = document.createElement("footer");
+
+      const avatar = document.createElement("span");
+      avatar.className = "gb-avatar";
+      avatar.textContent = (entry.name[0] ?? "?").toUpperCase();
+
+      const name = document.createElement("span");
+      name.className = "gb-name";
+      if (entry.website) {
+        const a = document.createElement("a");
+        a.href = entry.website;
+        a.target = "_blank";
+        a.rel = "noopener nofollow ugc";
+        a.textContent = entry.name;
+        name.append(a);
+      } else {
+        name.textContent = entry.name;
+      }
+
+      const time = document.createElement("time");
+      time.className = "gb-time";
+      time.dateTime = entry.created_at;
+      time.textContent = ago(entry.created_at);
+
+      foot.append(avatar, name, time);
+      li.append(text, foot);
+      return li;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(`/api/guestbook?page=${page}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          showNotice(errors.offline ?? "");
+          return;
+        }
+
+        countEl.textContent = String(data.total ?? 0);
+        totalPages = data.totalPages ?? 1;
+        page = data.page ?? 1;
+
+        const entries: Entry[] = data.entries ?? [];
+        if (!entries.length) {
+          showNotice(labels.empty ?? "");
+          return;
+        }
+
+        list.replaceChildren(...entries.map(render));
+        pager.hidden = totalPages <= 1;
+        pageEl.textContent = `${page} / ${totalPages}`;
+        prev.disabled = page <= 1;
+        next.disabled = page >= totalPages;
+      } catch {
+        showNotice(errors.offline ?? "");
+      }
+    }
+
+    /** Prázdna kniha aj výpadok API vyzerajú rovnako: jedna karta, žiadny pager. */
+    function showNotice(text: string) {
+      countEl.textContent = "0";
+      const notice = document.createElement("li");
+      notice.className = "gb-entry gb-notice";
+      notice.textContent = text;
+      list.replaceChildren(notice);
+      pager.hidden = true;
+    }
+
+    function setMessage(text: string, kind: "info" | "error" = "info") {
+      msg.textContent = text;
+      msg.dataset.kind = kind;
+    }
+
+    prev.addEventListener("click", () => {
+      if (page > 1) { page -= 1; void load(); }
+    });
+    next.addEventListener("click", () => {
+      if (page < totalPages) { page += 1; void load(); }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      button.disabled = true;
+      setMessage(labels.sending ?? "");
+
+      try {
+        const res = await fetch("/api/guestbook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...data, lang }),
+        });
+        const payload = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          form.reset();
+          setMessage(labels.thanks ?? "");
+          page = 1;
+          await load();
+        } else {
+          setMessage(errors[payload.error] ?? errors.generic ?? "", "error");
+        }
+      } catch {
+        setMessage(errors.generic ?? "", "error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    void load();
+  }
+
+  setupGuestbook();
+  document.addEventListener("astro:page-load", setupGuestbook);
+</script>

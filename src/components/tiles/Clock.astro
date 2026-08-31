@@ -1,0 +1,109 @@
+---
+import Panel from "../Panel.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Panel class="clock" pad="18px">
+  <p class="status">
+    <span class="dot" aria-hidden="true"></span>
+    {t("available")}
+  </p>
+
+  <p class="eyebrow">{t("clockHere")}</p>
+  <p class="time" data-clock="home">--:--</p>
+  <p class="zone" data-zone="home">Europe/Bratislava</p>
+
+  <p class="eyebrow same" data-same hidden>{t("clockSame")}</p>
+
+  <p class="eyebrow there">{t("clockThere")}</p>
+  <p class="time" data-clock="local">--:--</p>
+  <p class="zone" data-zone="local"></p>
+</Panel>
+
+<style>
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.15);
+  }
+
+  .time {
+    font-family: var(--font-mono);
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .zone {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .there { margin-top: 14px; }
+  .same { margin-top: 10px; color: var(--muted); }
+</style>
+
+<script>
+  const HOME_ZONE = "Europe/Bratislava";
+
+  function startClock() {
+    const els = {
+      home: document.querySelector<HTMLElement>('[data-clock="home"]'),
+      local: document.querySelector<HTMLElement>('[data-clock="local"]'),
+    };
+    if (!els.home || !els.local) return;
+
+    const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zoneEl = document.querySelector<HTMLElement>('[data-zone="local"]');
+    if (zoneEl) zoneEl.textContent = localZone;
+
+    const fmt = (zone: string) =>
+      new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: zone,
+      });
+
+    const home = fmt(HOME_ZONE);
+    const local = fmt(localZone);
+
+    // Rovnaké pásmo — doplníme poznámku, aby dvojica rovnakých časov dávala zmysel.
+    const same = document.querySelector<HTMLElement>("[data-same]");
+    if (same) same.hidden = localZone === HOME_ZONE ? false : true;
+
+    const tick = () => {
+      const now = new Date();
+      els.home!.textContent = home.format(now);
+      els.local!.textContent = local.format(now);
+    };
+
+    tick();
+    const id = window.setInterval(tick, 10_000);
+    document.addEventListener("astro:before-swap", () => clearInterval(id), { once: true });
+  }
+
+  startClock();
+  document.addEventListener("astro:page-load", startClock);
+</script>

@@ -1,0 +1,165 @@
+---
+import SubPage from "../../../layouts/SubPage.astro";
+import Panel from "../../../components/Panel.astro";
+import { projects } from "../../../data/projects";
+import { LANGS, DEFAULT_LANG, useTranslations, localizePath, type Lang } from "../../../i18n/utils";
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) =>
+    projects.map((project) => ({
+      params: {
+        lang: lang === DEFAULT_LANG ? undefined : lang,
+        slug: project.slug,
+      },
+      props: { lang, project },
+    })),
+  );
+}
+
+const { lang, project } = Astro.props as { lang: Lang; project: (typeof projects)[number] };
+const t = useTranslations(lang);
+const c = project[lang];
+---
+
+<SubPage
+  lang={lang}
+  path={`/work/${project.slug}`}
+  title={c.title}
+  subtitle={c.summary}
+  backHref={localizePath("/work", lang)}
+>
+  <article class="case">
+    <Panel pad="0" class="shot">
+      <img src={project.img} alt="" width="1200" height="750" decoding="async" />
+    </Panel>
+
+    <dl class="meta">
+      <div><dt>{t("caseRole")}</dt><dd>{c.role}</dd></div>
+      <div><dt>{t("caseYear")}</dt><dd>{project.year}</dd></div>
+      <div>
+        <dt>{t("caseOutcome")}</dt>
+        <dd>{project.concept ? t("labelConcept") : t("labelLive")}</dd>
+      </div>
+    </dl>
+
+    <section class="block">
+      <h2>{t("caseProblem")}</h2>
+      <p>{c.problem}</p>
+    </section>
+
+    <section class="block">
+      <h2>{t("caseSolution")}</h2>
+      <ul class="bullets">
+        {c.solution.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>{t("caseStack")}</h2>
+      <ul class="tags">
+        {project.stack.map((s) => <li>{s}</li>)}
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>{t("caseOutcome")}</h2>
+      <p>{c.outcome}</p>
+    </section>
+
+    <div class="links">
+      <a class="btn primary" href={project.live} target="_blank" rel="noopener">
+        {t("caseLive")} ↗
+      </a>
+      <a class="btn" href={project.code} target="_blank" rel="noopener">{t("caseCode")} →</a>
+    </div>
+  </article>
+</SubPage>
+
+<style>
+  .case {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .shot :global(.panel-in) { padding: 0; }
+  .shot img {
+    width: 100%;
+    height: clamp(220px, 34vw, 400px);
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin: 22px 0 34px;
+  }
+  dt {
+    margin-bottom: 3px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  dd { margin: 0; font-size: 13px; }
+
+  .block + .block { margin-top: 26px; }
+
+  .block h2 {
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+    transition: color var(--dur) var(--ease);
+  }
+  .block p { color: var(--text-2); }
+
+  .bullets { display: grid; gap: 6px; color: var(--text-2); }
+  .bullets li { padding-left: 16px; position: relative; }
+  .bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 5px;
+    height: 5px;
+    background: var(--accent);
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags li {
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-2);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 36px;
+  }
+
+  .btn {
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .btn:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn.primary { border-color: var(--accent-line); }
+</style>

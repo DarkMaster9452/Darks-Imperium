@@ -1,0 +1,78 @@
+---
+/**
+ * Rotujúci avatar — sprite sheet 6×4 (24 snímok), prehrávaný cez steps():
+ * riadok po riadku sa posúva pozadie, takže postava sa plynulo otočí dokola.
+ *
+ * Súbor sa vyberá podľa akcentu premennou --avatar-sheet (definovaná v
+ * tokens.css pre každý [data-accent]), takže sa avatar prefarbí spolu s webom.
+ * Kým sheet v public/sprites/ nie je, dlaždica drží prázdne miesto a nič sa
+ * nerozsype.
+ */
+interface Props {
+  alt: string;
+  class?: string;
+  /** Dĺžka jednej otáčky. */
+  duration?: string;
+}
+
+const { alt, class: className = "", duration = "3.2s" } = Astro.props;
+
+const COLS = 6;
+const ROWS = 4;
+---
+
+<div
+  class:list={["avatar", className]}
+  role="img"
+  aria-label={alt}
+  style={`--cols:${COLS};--rows:${ROWS};--dur:${duration}`}
+>
+  <span class="sprite"></span>
+</div>
+
+<style>
+  .avatar {
+    display: grid;
+    place-items: center end;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+  }
+
+  .sprite {
+    display: block;
+    width: calc(var(--sprite-h, 220px) * 0.86);
+    height: var(--sprite-h, 220px);
+
+    /* Sheet je 6×4 — pozadie zväčšíme 6× na šírku a 4× na výšku, aby jedna
+       „bunka" presne vyplnila prvok. */
+    background-image: var(--avatar-sheet);
+    background-repeat: no-repeat;
+    background-size: calc(var(--cols) * 100%) calc(var(--rows) * 100%);
+    background-position: 0 0;
+    image-rendering: pixelated;
+
+    /* Dve animácie naraz: rýchlejšia prechádza stĺpce v riadku, pomalšia
+       posúva na ďalší riadok — spolu prejdú všetkých 24 snímok. */
+    animation:
+      spin-cols calc(var(--dur) / var(--rows)) steps(var(--cols)) infinite,
+      spin-rows var(--dur) steps(var(--rows)) infinite;
+  }
+
+  @keyframes spin-cols {
+    to { background-position-x: calc(var(--cols) * -100%); }
+  }
+  @keyframes spin-rows {
+    to { background-position-y: calc(var(--rows) * -100%); }
+  }
+
+  /* Na úzkych obrazovkách je hero jednostĺpcový — vyhradené miesto by tam bola
+     len diera pod tlačidlami. */
+  @media (max-width: 760px) {
+    .avatar { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sprite { animation: none; }
+  }
+</style>

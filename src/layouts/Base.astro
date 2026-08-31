@@ -1,0 +1,106 @@
+---
+import "@fontsource-variable/space-grotesk";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+import { ClientRouter } from "astro:transitions";
+import { useTranslations, otherLang, localizePath, type Lang } from "../i18n/utils";
+import PixelWipe from "../components/PixelWipe.astro";
+import Dock from "../components/Dock.astro";
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** Cesta bez jazykového prefixu, napr. "/work" — pre prepínač a hreflang. */
+  path?: string;
+}
+
+const { lang, title, description, path = "/" } = Astro.props;
+const t = useTranslations(lang);
+
+const pageTitle = title ? `${title} — Martin Straňanek` : t("siteTitle");
+const pageDesc = description ?? t("siteDesc");
+const site = "https://strananekm.com";
+const canonical = new URL(localizePath(path, lang), site).href;
+const other = otherLang(lang);
+const otherHref = localizePath(path, other);
+---
+
+<!doctype html>
+<html lang={lang} data-accent="crimson">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="alternate" hreflang="sk" href={new URL(localizePath(path, "sk"), site).href} />
+    <link rel="alternate" hreflang="en" href={new URL(localizePath(path, "en"), site).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(localizePath(path, "sk"), site).href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={`${site}/og.png`} />
+    <meta property="og:locale" content={lang === "sk" ? "sk_SK" : "en_US"} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#0b0b0c" />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Martin Straňanek",
+        url: site,
+        email: "mailto:strananekm@gmail.com",
+        jobTitle: "Frontend & full-stack developer",
+        address: { "@type": "PostalAddress", addressCountry: "SK" },
+        sameAs: ["https://github.com/DarkMaster9452"],
+      })}
+    />
+
+    <!-- Akcent sa nastaví ešte pred prvým vykreslením, aby farba nepreblikla. -->
+    <script is:inline>
+      (function () {
+        try {
+          var a = localStorage.getItem("accent");
+          if (a) document.documentElement.dataset.accent = a;
+        } catch (e) {
+          /* privátny režim — ostane predvolený akcent */
+        }
+      })();
+    </script>
+
+    <ClientRouter />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">{t("skipToContent")}</a>
+
+    <PixelWipe />
+
+    <main id="main" class="board">
+      <slot />
+    </main>
+
+    <Dock lang={lang} otherHref={otherHref} otherLabel={t("langSwitchTo")} />
+
+    <style>
+      .board {
+        position: relative;
+        z-index: 1;
+        width: min(100% - 24px, var(--board));
+        margin-inline: auto;
+        padding-block: clamp(16px, 3vh, 28px) 64px;
+      }
+    </style>
+  </body>
+</html>

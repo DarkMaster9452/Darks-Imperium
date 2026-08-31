@@ -1,0 +1,63 @@
+---
+/** Spoločný rám podstránok: tlačidlo Späť, vycentrovaný nadpis, obsah. */
+import Base from "./Base.astro";
+import { useTranslations, localizePath, type Lang } from "../i18n/utils";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  subtitle?: string;
+  path: string;
+  description?: string;
+  /** Kam vedie „Späť" — predvolene na dosku. */
+  backHref?: string;
+}
+
+const { lang, title, subtitle, path, description, backHref } = Astro.props;
+const t = useTranslations(lang);
+const back = backHref ?? localizePath("/", lang);
+---
+
+<Base lang={lang} title={title} description={description ?? subtitle} path={path}>
+  <a class="back" href={back}>{t("back")}</a>
+
+  <header class="head">
+    <h1>{title}</h1>
+    {subtitle && <p class="sub">{subtitle}</p>}
+  </header>
+
+  <slot />
+</Base>
+
+<style>
+  .back {
+    display: inline-block;
+    padding: 5px 14px;
+    font-size: 12px;
+    color: var(--text);
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-sm);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .back:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+
+  .head {
+    margin: clamp(28px, 6vh, 56px) auto clamp(24px, 5vh, 44px);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .sub {
+    max-width: 52ch;
+    margin: 8px auto 0;
+    color: var(--text-2);
+  }
+</style>

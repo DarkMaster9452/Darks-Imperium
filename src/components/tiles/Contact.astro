@@ -1,0 +1,50 @@
+---
+import Panel from "../Panel.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Panel class="contact" pad="22px">
+  <h2 class="title">{t("contactTitle")}</h2>
+
+  <p class="eyebrow label">{t("contactDetails")}</p>
+  <ul class="details">
+    <li><a href="mailto:strananekm@gmail.com">strananekm@gmail.com</a></li>
+    <li class="muted">{t("contactLocation")}</li>
+  </ul>
+
+  <p class="eyebrow label">{t("contactFindMe")}</p>
+  <ul class="links">
+    <li>
+      <a href="https://github.com/DarkMaster9452" target="_blank" rel="noopener">GitHub</a>
+    </li>
+    <li>
+      <a href="mailto:strananekm@gmail.com">{t("heroEmail")}</a>
+    </li>
+  </ul>
+</Panel>
+
+<style>
+  .title {
+    max-width: 12ch;
+    margin-bottom: 22px;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .label { margin-bottom: 8px; }
+  .label:not(:first-of-type) { margin-top: 22px; }
+
+  .details,
+  .links { display: grid; gap: 3px; }
+
+  .details { font-style: italic; color: var(--text-2); }
+  .muted { color: var(--muted); }
+
+  .links { font-size: 13px; color: var(--text-2); }
+</style>

@@ -1,0 +1,75 @@
+/* ══ Dizajnové tokeny ═══════════════════════════════════════════════════════
+   Jediné miesto, kde žijú farby, rozmery a rytmus. Akcentová farba sa mení
+   atribútom data-accent na <html> (viď AccentTile) — všetko ostatné ju dedí. */
+
+:root {
+  /* plochy */
+  --bg: #0b0b0b;
+  --panel: #171717;
+  --panel-2: #111111;
+  --panel-3: #1f1f1f;
+  --line: #383838;
+  --line-strong: #4a4a4a;
+  --grid: rgba(255, 255, 255, 0.028);
+
+  /* text */
+  --text: #f7f7f7;
+  --text-2: #9a9a9a;
+  --muted: #6e6e6e;
+
+  /* akcent — prepisuje ho [data-accent] nižšie */
+  --accent: #e63946;
+  --accent-ink: #ffffff;
+
+  /* odvodené od akcentu, netreba ich meniť ručne */
+  --accent-soft: color-mix(in oklab, var(--accent) 18%, transparent);
+  --accent-line: color-mix(in oklab, var(--accent) 55%, transparent);
+  --accent-glow: color-mix(in oklab, var(--accent) 30%, transparent);
+
+  /* tvar a rytmus */
+  --radius: 8px;
+  --radius-sm: 6px;
+  --gap: 16px;
+  --board: 1152px;
+
+  /* písmo */
+  --font-display: "Space Grotesk Variable", "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* pohyb */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 0.22s;
+
+  color-scheme: dark;
+}
+
+/* Avatar: rotujúci sprite sheet 6×4 (24 snímok), vlastný súbor pre každý akcent.
+   Kým súbory nie sú v public/sprites/, je --avatar-sheet `none` a v heroi ostane
+   vyhradené prázdne miesto — bez chýbajúcich requestov.
+
+   Ako ho zapnúť: nahraj avatar-spin-<akcent>.webp do public/sprites/ a odkomentuj
+   riadok --avatar-sheet v príslušnom bloku nižšie. */
+:root { --avatar-sheet: none; }
+
+[data-accent="crimson"] {
+  --accent: #e63946;
+  /* --avatar-sheet: url("/sprites/avatar-spin-crimson.webp"); */
+}
+[data-accent="amber"] {
+  --accent: #ffeb3b;
+  --accent-ink: #1a1200;
+  /* --avatar-sheet: url("/sprites/avatar-spin-amber.webp"); */
+}
+[data-accent="blue"] {
+  --accent: #2196f3;
+  /* --avatar-sheet: url("/sprites/avatar-spin-blue.webp"); */
+}
+[data-accent="violet"] {
+  --accent: #9c27b0;
+  /* --avatar-sheet: url("/sprites/avatar-spin-violet.webp"); */
+}
+[data-accent="green"] {
+  --accent: #66bb6a;
+  --accent-ink: #04220f;
+  /* --avatar-sheet: url("/sprites/avatar-spin-green.webp"); */
+}
