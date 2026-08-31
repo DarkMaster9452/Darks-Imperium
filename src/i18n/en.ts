@@ -43,7 +43,6 @@ export const en: Record<keyof typeof sk, string> = {
   available: "Taking on projects",
 
   nowTitle: "Now",
-  nowWhat: "what's this?",
   nowText: "Building custom websites and my own projects.",
 
   workTile: "Selected work",
@@ -101,6 +100,43 @@ export const en: Record<keyof typeof sk, string> = {
   gbErrRate: "Hold on — one message per 10 minutes, please.",
   gbErrGeneric: "Couldn't save your message. Try again in a moment.",
   gbOffline: "The guestbook is temporarily unavailable.",
+
+  nowPageTitle: "Now",
+  nowPageSub: "What I'm working on, what I'm taking on, and how to reach me. A now page, in the nownownow.com sense.",
+  nowUpdated: "Updated",
+  nowWhatIs: "What is a \u201cnow\u201d page?",
+
+  nowWorkingH: "What I'm working on",
+  nowWorkingP:
+    "Building custom websites for clients — most recently the site for DRAVIO s.r.o. Alongside that I keep polishing my own projects and this portfolio.",
+
+  nowOpenH: "Taking on projects",
+  nowOpenP:
+    "I currently have capacity for new work. Feel free to write even if the idea is still vague — I usually reply within 24 hours and tell you straight away whether I can build it and roughly what it costs.",
+  nowOpenList:
+    "A new site for a company or sole trader|A redesign of a site that no longer keeps up|An ordering or booking system|A club or association site with a members' area|A one-page site for a campaign or product",
+
+  nowIncludedH: "What's included",
+  nowIncludedList:
+    "A design made for you, not a template|Fast loading and code that stays tidy|Accessibility and a layout that works on every device|Basic SEO and social previews|Deployment to your domain and a handover",
+
+  nowProcessH: "How it goes",
+  nowProcess1H: "You get in touch",
+  nowProcess1P: "Tell me what you need. A few sentences is enough.",
+  nowProcess2H: "We agree the scope",
+  nowProcess2P: "We go through what the site has to do, and I give you a price and a date. No obligation.",
+  nowProcess3H: "Design and build",
+  nowProcess3P: "I show progress as I go, so you can see where it's heading and steer it.",
+  nowProcess4H: "Launch",
+  nowProcess4P: "I put it live on your domain and show you how to manage the content yourself.",
+
+  nowLearningH: "What I'm learning",
+  nowLearningP:
+    "Astro and view transitions, animation and micro-interactions, and working with Postgres through Neon.",
+
+  nowCta: "Message me",
+  nowCtaSub: "Or take a look at what I've built first.",
+  nowCtaWork: "See the work",
 
   cvTitle: "Résumé",
   cvSub: "Who I am, what I work with and what I've built. Message me straight from this page.",
