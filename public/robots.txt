@@ -4,4 +4,4 @@ Allow: /
 # API endpointy nemajú v indexe čo hľadať.
 Disallow: /api/
 
-Sitemap: https://strananekm.com/sitemap-index.xml
+Sitemap: https://www.strananekm.com/sitemap-index.xml
