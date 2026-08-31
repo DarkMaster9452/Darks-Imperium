@@ -1,0 +1,96 @@
+---
+/**
+ * Prechod medzi stránkami — mriežka štvorcov v akcentovej farbe, ktorá naskáče
+ * po diagonále, vymení sa obsah a zase odskáče. Beží nad View Transitions API.
+ */
+const COLS = 26;
+const ROWS = 14;
+const cells = Array.from({ length: COLS * ROWS }, (_, i) => ({
+  col: i % COLS,
+  row: Math.floor(i / COLS),
+}));
+---
+
+<div class="wipe" aria-hidden="true" data-wipe>
+  {
+    cells.map(({ col, row }) => (
+      <i style={`--d:${(col + row) * 9 + ((col * 7 + row * 13) % 40)}ms`} />
+    ))
+  }
+</div>
+
+{/*
+  Rozmery mriežky sú v CSS napevno, nie cez define:vars — to by pripísalo
+  --cols a --rows do style atribútu každej z 364 dlaždíc a zbytočne nafúklo
+  HTML o desiatky kilobajtov. Pri zmene COLS/ROWS treba upraviť aj repeat() nižšie.
+*/}
+<style>
+  .wipe {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(26, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .wipe i {
+    background: var(--accent);
+    transform: scale(0);
+    transition: transform 0.16s linear var(--d);
+  }
+
+  .wipe[data-state="in"] {
+    visibility: visible;
+  }
+  .wipe[data-state="in"] i {
+    transform: scale(1.02);
+  }
+
+  .wipe[data-state="out"] {
+    visibility: visible;
+  }
+  .wipe[data-state="out"] i {
+    transform: scale(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wipe {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /** Necháme dlaždice dobehnúť, kým Astro vymení dokument. */
+  const settle = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+  document.addEventListener("astro:before-preparation", (event) => {
+    if (REDUCED.matches) return;
+    const wipe = document.querySelector<HTMLElement>("[data-wipe]");
+    if (!wipe) return;
+
+    const original = (event as any).loader;
+    (event as any).loader = async () => {
+      wipe.dataset.state = "in";
+      await Promise.all([original(), settle(420)]);
+    };
+  });
+
+  document.addEventListener("astro:after-swap", () => {
+    const wipe = document.querySelector<HTMLElement>("[data-wipe]");
+    if (!wipe) return;
+    // Nová stránka má vlastnú mriežku v stave "in" — odskáčeme ju.
+    wipe.dataset.state = "in";
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        wipe.dataset.state = "out";
+        setTimeout(() => delete wipe.dataset.state, 500);
+      });
+    });
+  });
+</script>

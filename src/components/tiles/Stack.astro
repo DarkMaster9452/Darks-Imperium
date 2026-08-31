@@ -1,0 +1,83 @@
+---
+import Panel from "../Panel.astro";
+import { stackGroups } from "../../data/stack";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Panel class="stack" pad="20px">
+  <div class="scroller">
+    <h2 class="tile-title">{t("stackTitle")}</h2>
+
+    {
+    stackGroups.map((group) => (
+      <section class="group">
+        <p class="eyebrow">{t(group.labelKey)}</p>
+        <ul class="chips">
+          {group.tools.map((tool) => (
+            <li>
+              <a class="chip" href={tool.href} target="_blank" rel="noopener">
+                <span class="logo" aria-hidden="true" set:html={tool.logo} />
+                {tool.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+      ))
+    }
+  </div>
+</Panel>
+
+<style>
+  /* Na pevnej doske sa zoznam nástrojov môže nezmestiť — nech si odscrolluje
+     vnútri karty namiesto toho, aby roztiahol celú mriežku. */
+  .scroller {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+
+  .tile-title { margin-bottom: 16px; }
+
+  .group + .group { margin-top: 12px; }
+  .group .eyebrow { margin-bottom: 7px; }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    font-size: 10.5px;
+    color: var(--text-2);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      background var(--dur) var(--ease);
+  }
+  .chip:hover {
+    color: var(--text);
+    background: var(--panel-3);
+    border-color: var(--accent-line);
+  }
+
+  .logo {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+  .logo :global(svg) { width: 12px; height: 12px; }
+</style>

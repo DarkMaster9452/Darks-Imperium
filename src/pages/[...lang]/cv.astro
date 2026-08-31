@@ -1,0 +1,373 @@
+---
+import SubPage from "../../layouts/SubPage.astro";
+import Panel from "../../components/Panel.astro";
+import { projects } from "../../data/projects";
+import { stackGroups } from "../../data/stack";
+import { langStaticPaths, useTranslations, localizePath, type Lang } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return langStaticPaths();
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+
+const services = [
+  { h: t("svc1H"), p: t("svc1P") },
+  { h: t("svc2H"), p: t("svc2P") },
+  { h: t("svc3H"), p: t("svc3P") },
+];
+
+const errors = {
+  name: t("ctErrName"),
+  email: t("ctErrEmail"),
+  message: t("ctErrMessage"),
+  rate: t("ctErrRate"),
+  generic: t("ctErrGeneric"),
+  offline: t("ctOffline"),
+};
+
+const labels = { sending: t("ctSending"), thanks: t("ctThanks") };
+---
+
+<SubPage lang={lang} path="/cv" title={t("cvTitle")} subtitle={t("cvSub")}>
+  <div class="cv">
+    <div class="actions no-print">
+      <button type="button" class="btn" data-print>{t("cvPrint")}</button>
+      <span class="hint">{t("cvPrintHint")}</span>
+    </div>
+
+    <Panel pad="clamp(20px, 4vw, 34px)" class="doc">
+      <header class="who">
+        <h2>Martin Straňanek</h2>
+        <p class="role">{t("heroP1rest").replace(/^—\s*/, "")}</p>
+        <ul class="contact-line">
+          <li><a href="mailto:strananekm@gmail.com">strananekm@gmail.com</a></li>
+          <li>{t("contactLocation")}</li>
+          <li>
+            <a href="https://github.com/DarkMaster9452" target="_blank" rel="noopener">
+              github.com/DarkMaster9452
+            </a>
+          </li>
+        </ul>
+      </header>
+
+      <section class="block">
+        <h3>{t("cvProfile")}</h3>
+        <p>{t("heroP2")}</p>
+        <p>{t("heroP3")}</p>
+      </section>
+
+      <section class="block">
+        <h3>{t("cvServices")}</h3>
+        <dl class="services">
+          {services.map((s) => (
+            <div>
+              <dt>{s.h}</dt>
+              <dd>{s.p}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="block">
+        <h3>{t("cvSkills")}</h3>
+        <dl class="skills">
+          {stackGroups.map((group) => (
+            <div>
+              <dt>{t(group.labelKey)}</dt>
+              <dd>{group.tools.map((tool) => tool.name).join(" · ")}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="block">
+        <h3>{t("cvProjects")}</h3>
+        <ul class="projects">
+          {projects.map((project) => {
+            const c = project[lang];
+            return (
+              <li>
+                <div class="head">
+                  <a href={localizePath(`/work/${project.slug}`, lang)}>{c.title}</a>
+                  <span class="year">{project.year}</span>
+                </div>
+                <p class="role-line">{c.role}</p>
+                <p>{c.summary}</p>
+                <p class="tech">{project.stack.join(" · ")}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    </Panel>
+
+    <Panel pad="clamp(20px, 4vw, 30px)" class="form-card no-print">
+      <h2 class="form-title">{t("ctTitle")}</h2>
+      <p class="form-sub">{t("ctSub")}</p>
+
+      <form
+        data-contact-form
+        data-lang={lang}
+        data-errors={JSON.stringify(errors)}
+        data-labels={JSON.stringify(labels)}
+        novalidate
+      >
+        <div class="fields">
+          <label>
+            <span class="eyebrow">{t("ctName")} *</span>
+            <input name="name" type="text" maxlength="60" required placeholder={t("ctNamePh")} />
+          </label>
+          <label>
+            <span class="eyebrow">{t("ctEmail")} *</span>
+            <input name="email" type="email" maxlength="120" required placeholder={t("ctEmailPh")} />
+          </label>
+        </div>
+
+        <label class="full">
+          <span class="eyebrow">{t("ctMessage")} *</span>
+          <textarea name="message" rows="5" maxlength="2000" required placeholder={t("ctMessagePh")}
+          ></textarea>
+        </label>
+
+        <label class="pot" aria-hidden="true">
+          Company
+          <input name="company" type="text" tabindex="-1" autocomplete="off" />
+        </label>
+
+        <div class="row">
+          <p class="msg" data-contact-msg role="status"></p>
+          <button type="submit" class="send">{t("ctSend")}</button>
+        </div>
+      </form>
+    </Panel>
+  </div>
+</SubPage>
+
+<style>
+  .cv { max-width: 780px; margin-inline: auto; }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--gap);
+  }
+
+  .btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: none;
+    border: 1px solid var(--accent-line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+  .btn:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+
+  .hint { font-size: 11px; color: var(--muted); }
+
+  .who { padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+  .who h2 {
+    font-size: clamp(22px, 3.5vw, 28px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .role { margin-top: 2px; color: var(--accent); transition: color var(--dur) var(--ease); }
+
+  .contact-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-2);
+  }
+
+  .block { margin-top: 26px; }
+  .block h3 {
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .block p { color: var(--text-2); }
+  .block p + p { margin-top: 8px; }
+
+  .services,
+  .skills { display: grid; gap: 12px; }
+  .services dt,
+  .skills dt { font-size: 13px; font-weight: 600; color: var(--text); }
+  .services dd,
+  .skills dd { margin: 2px 0 0; font-size: 13px; color: var(--text-2); }
+
+  .projects { display: grid; gap: 20px; }
+  .projects .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .projects .head a { font-size: 14px; font-weight: 600; }
+  .year { font-family: var(--font-mono); font-size: 10px; color: var(--muted); }
+  .role-line { font-size: 12px; color: var(--accent); transition: color var(--dur) var(--ease); }
+  .projects p { font-size: 13px; }
+  .tech {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── formulár ─────────────────────────────────────────────────────────── */
+  .form-card { margin-top: var(--gap); }
+  .form-title { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; }
+  .form-sub { margin-bottom: 18px; font-size: 13px; color: var(--text-2); }
+
+  .fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  label { display: block; }
+  label .eyebrow { display: block; margin-bottom: 5px; }
+  .full { margin-top: 12px; }
+
+  input,
+  textarea {
+    width: 100%;
+    padding: 9px 11px;
+    font: inherit;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    resize: vertical;
+  }
+  input:focus-visible,
+  textarea:focus-visible { outline: none; border-color: var(--accent); }
+  input::placeholder,
+  textarea::placeholder { color: var(--muted); }
+
+  .pot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .msg { font-size: 12px; color: var(--text-2); }
+  .msg[data-kind="error"] { color: var(--accent); }
+
+  .send {
+    padding: 9px 22px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-ink);
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: opacity var(--dur) var(--ease);
+  }
+  .send:hover { opacity: 0.88; }
+  .send:disabled { opacity: 0.5; cursor: default; }
+
+  /* Tlač: len dokument, na bielom a bez ozdôb. */
+  @media print {
+    .no-print { display: none !important; }
+    .cv { max-width: none; }
+    .doc :global(.panel-in) { padding: 0; }
+  }
+</style>
+
+<style is:global>
+  @media print {
+    :root { --text: #111; --text-2: #333; --muted: #666; --line: #ccc; }
+    body { background: #fff; color: #111; }
+    body::before,
+    body::after { display: none !important; }
+    .dock,
+    .wipe,
+    .skip-link,
+    .back { display: none !important; }
+    .panel { background: #fff !important; border-color: #ddd !important; box-shadow: none !important; }
+    .nub { display: none !important; }
+  }
+</style>
+
+<script>
+  import { play, CLICK, SENT } from "../../lib/sound";
+
+  function setupCv() {
+    document.querySelector<HTMLButtonElement>("[data-print]")?.addEventListener("click", () => {
+      play(CLICK);
+      window.print();
+    });
+
+    const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+    if (!form) return;
+
+    const lang = form.dataset.lang === "en" ? "en" : "sk";
+    const errors = JSON.parse(form.dataset.errors ?? "{}") as Record<string, string>;
+    const labels = JSON.parse(form.dataset.labels ?? "{}") as Record<string, string>;
+    const msg = document.querySelector<HTMLElement>("[data-contact-msg]")!;
+
+    const setMessage = (text: string, kind: "info" | "error" = "info") => {
+      msg.textContent = text;
+      msg.dataset.kind = kind;
+    };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      button.disabled = true;
+      setMessage(labels.sending ?? "");
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...data, lang }),
+        });
+        const payload = await res.json().catch(() => ({}));
+
+        if (res.ok) {
+          form.reset();
+          setMessage(labels.thanks ?? "");
+          play(SENT);
+        } else {
+          setMessage(errors[payload.error] ?? errors.generic ?? "", "error");
+        }
+      } catch {
+        setMessage(errors.generic ?? "", "error");
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
+  setupCv();
+  document.addEventListener("astro:page-load", setupCv);
+</script>

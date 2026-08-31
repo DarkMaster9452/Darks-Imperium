@@ -1,184 +1,199 @@
 # Portfólio — Martin Straňanek
 
-Osobné portfólio. Jeden statický súbor `index.html`, žiadny build, žiadne závislosti.
+Osobné portfólio ako **bento doska**: všetko podstatné na jednej obrazovke, detaily
+na podstránkach. Astro + vanilla JS, nasadené na Verceli.
 
-**Live:** https://darkmaster9452.github.io/idk/
-
----
-
-## Dizajn systém — OBSIDIAN × EMBER
-
-Tmavý, technický, futuristický. Všetky farby sú vlastné (žiadne default `#000` / `#ff0000`)
-a sú definované ako CSS premenné v `:root` na začiatku `<style>`.
-
-### OBSIDIAN — čierna sústava
-Čierne s jemným **fialovým podtónom**, aby pôsobili chladne a digitálne, nie „špinavo".
-
-| Premenná | Hex | Použitie |
-|---|---|---|
-| `--void` | `#07060B` | pozadie stránky |
-| `--ink-900` | `#0B0A11` | tmavé plochy, ticker |
-| `--ink-800` | `#100E18` | karty projektov |
-| `--ink-700` | `#16131F` | zvýraznené plochy |
-| `--ink-600` | `#1D1929` | najvyššia vrstva |
-| `--line` | `#241F33` | hairline rámiky |
-| `--line-soft` | `#17131F` | mriežka na pozadí, jemné deliče |
-
-### EMBER — vlastná červená
-Šarlátovo-karmínová (odtieň ~352°), navrhnutá tak, aby na čiernej **žiarila** a nepôsobila
-ako chybová hláška.
-
-| Premenná | Hex | Použitie |
-|---|---|---|
-| `--red` | `#F01F3D` | hlavná akcentová |
-| `--red-400` | `#FF4A63` | hover, zvýraznený text |
-| `--red-300` | `#FF8496` | jemné detaily |
-| `--red-600` | `#C20F2E` | gradienty |
-| `--red-700` | `#7E0A20` | rámiky, hlboké tiene |
-
-### Text
-`--text #EDEAF5` (chladná biela, nie `#fff`) · `--text-2 #B3ADC4` · `--muted #7C7590`
-
-**Chceš iný odtieň červenej?** Zmeň `--red`, `--red-400`, `--red-600`, `--red-700`
-v `:root` — celý web sa prefarbí, vrátane žiary, gradientov a rámikov.
+**Live:** https://strananekm.com
 
 ---
 
-## Logo
+## Spustenie
 
-Monogram **MS** — biele hranaté „M" a červené „S" so zrezanými zakončeniami, v skosenom
-štíte (rezy vľavo hore a vpravo dole). Rovnaké skosenie sa opakuje na tlačidlách, kartách
-a dialógoch — je to vizuálny podpis celej stránky.
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # produkčný build
+npm run check    # typová kontrola (chýbajúci preklad = chyba)
+```
 
-Logo žije na **3 miestach** a pri zmene ho treba upraviť všade:
+Pre návštevnú knihu skopíruj `.env.example` do `.env` a doplň `DATABASE_URL`
+a `GUESTBOOK_SALT`.
 
-| Súbor | Kde |
+---
+
+## Štruktúra
+
+```
+astro.config.mjs          Vercel adaptér, site = https://strananekm.com
+src/
+  styles/tokens.css       farby, rozmery, akcentové témy
+  styles/base.css         reset, mriežka na pozadí, spoločné drobnosti
+  i18n/{sk,en,utils}.ts   preklady a jazykové cesty
+  data/projects.ts        projekty + case studies (sk aj en)
+  data/stack.ts           toolbox rozdelený do skupín
+  layouts/Base.astro      <head>, SEO, prechody, dock
+  layouts/SubPage.astro   rám podstránok (Späť + nadpis)
+  components/             Panel, Avatar, Dock, PixelWipe + dlaždice v tiles/
+  pages/[...lang]/        doska a podstránky pre oba jazyky
+  lib/sound.ts            krátke tóny (hover, klik, akord, odoslanie)
+  pages/api/guestbook.ts  GET + POST návštevnej knihy
+  pages/api/contact.ts    POST kontaktného formulára
+public/                   screenshoty, favicon, og.png, sprites/
+```
+
+### Routy
+
+| SK | EN | Čo to je |
+|---|---|---|
+| `/` | `/en` | bento doska |
+| `/work` | `/en/work` | všetky projekty + služby |
+| `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `dravio`, `vantra`) |
+| `/guestbook` | `/en/guestbook` | návštevná kniha |
+| `/cv` | `/en/cv` | životopis + kontaktný formulár |
+
+---
+
+## Dizajn
+
+Tmavá doska (`--bg #0b0b0b`), karty `--panel #171717` s hairline rámikom, ktorý sa
+pri hoveri prefarbí na akcent. V rohoch kariet sú malé ozuby — odkaz na skosenie
+z pôvodného loga MS.
+
+**Akcentová farba** je prepínateľná (dlaždica s piatimi krúžkami). Nastaví
+`data-accent` na `<html>`, uloží voľbu do `localStorage` a inline skript v `<head>`
+ju obnoví ešte pred prvým vykreslením, takže farba nepreblikne. Pridať ďalšiu =
+jeden blok v `tokens.css` + jedna položka v `components/tiles/Accent.astro`.
+
+Písma: **Space Grotesk** (displej + UI) a **JetBrains Mono** (mono popisky, hodiny),
+self-hostované cez `@fontsource`, takže build nesiaha na Google Fonts.
+
+---
+
+## Jazyky
+
+Slovenčina je na koreňových cestách, angličtina pod `/en`. Preklady sú v
+`src/i18n/sk.ts` (zdroj pravdy) a `src/i18n/en.ts`.
+
+`en.ts` je typovaný ako `Record<keyof typeof sk, string>` — **chýbajúci preklad
+neprejde `npm run check` ani buildom.** Netreba na to žiadny skript.
+
+Texty projektov a case studies sú dvojjazyčné priamo v `src/data/projects.ts`
+(bloky `sk` a `en` pri každom projekte). `code` je voliteľné — klientske projekty
+so súkromným repozitárom tlačidlo na kód jednoducho nemajú.
+
+Náhľady projektov sú v `public/assets/`. **DRAVIO zatiaľ používa zástupnú
+grafiku `dravio-placeholder.svg`** (branding firmy, nie screenshot) — keď budeš
+mať reálny záber z dravio.sk, ulož ho ako `public/assets/dravio.webp` a prepíš
+`img` v `projects.ts`.
+
+---
+
+## Návštevná kniha
+
+Neon Postgres (projekt `strananek-portfolio`), jedna tabuľka:
+
+```sql
+create table guestbook (
+  id bigserial primary key,
+  name text not null check (char_length(name) between 1 and 40),
+  website text check (char_length(website) <= 120),
+  message text not null check (char_length(message) between 1 and 400),
+  lang text not null default 'sk',
+  ip_hash text not null,
+  created_at timestamptz not null default now()
+);
+create index on guestbook (created_at desc);
+```
+
+Ochrany v `src/pages/api/guestbook.ts`:
+
+- dĺžky kontroluje API aj `check` constraint v databáze,
+- `website` musí byť platná `http(s)` adresa,
+- skryté pole `company` (honeypot) — vyplnené znamená robota,
+- jeden odkaz za 10 minút na `ip_hash`; **ukladá sa SHA-256 z IP a soli, nikdy
+  samotná IP adresa**,
+- odkazy sa vykresľujú cez `textContent`, nikdy `innerHTML`.
+
+Kontaktný formulár na `/cv` používa rovnaké ochrany a vlastnú tabuľku:
+
+```sql
+create table contact_messages (
+  id bigserial primary key,
+  name text not null check (char_length(name) between 1 and 60),
+  email text not null check (char_length(email) between 3 and 120),
+  message text not null check (char_length(message) between 1 and 2000),
+  lang text not null default 'sk',
+  ip_hash text not null,
+  created_at timestamptz not null default now()
+);
+```
+
+Správy z formulára si prečítaš v Neon konzole:
+`select created_at, name, email, message from contact_messages order by created_at desc;`
+
+Bez `DATABASE_URL` sa obe API tvária ako nedostupné (503) a stránka to slušne
+oznámi — build ani zvyšok webu to nepoloží.
+
+---
+
+## Avatar
+
+V heroi sa točí avatar zo sprite sheetu **6×4 (24 snímok po 414×390 px)**. Hrajú ho
+dve CSS animácie naraz: rýchlejšia prechádza stĺpce v riadku, pomalšia posúva na
+ďalší riadok.
+
+Pozor na percentá: `background-position` v percentách sa počíta z *rozdielu*
+veľkostí pozadia a prvku, nie zo šírky prvku. Preto animácia beží od `0 %` do
+`100 %` s `steps(n, jump-none)` — nie na násobky `-100 %`.
+
+Sheet pre každý akcent je v `public/sprites/avatar-spin-<akcent>.webp` a vyberá ho
+premenná `--avatar-sheet` v `tokens.css`, takže postava má vždy farbu témy.
+
+---
+
+## Nasadenie
+
+Vercel projekt **`strananekm`** je napojený na tento repozitár, Astro si nájde sám.
+V *Settings → Environment Variables* musia byť `DATABASE_URL` a `GUESTBOOK_SALT`.
+
+Doména `strananekm.com` je nastavená ako `site` v `astro.config.mjs` — z nej sa
+odvodzuje `canonical`, `og:url`, `og:image` aj `hreflang`.
+
+---
+
+## Zvuk
+
+`src/lib/sound.ts` skladá krátke tóny cez WebAudio — žiadne audio súbory:
+
+| Tón | Kedy |
 |---|---|
-| `index.html` | inline `<svg>` v `.brand .mark` (navigácia) |
-| `favicon.svg` | ikona v záložke prehliadača |
-| `og.svg` | zdroj sociálnej karty |
+| `CARD_HOVER` | prejdenie myšou po karte |
+| `CLICK` | klik na odkaz alebo tlačidlo |
+| `CHIME` | prepnutie akcentovej farby, zapnutie zvuku |
+| `SENT` | odoslaný odkaz alebo správa |
 
-Cesty sú identické vo všetkých troch:
-```
-štít  M8 1H39V32L32 39H1V8Z
-M     M5.5 28.5V12l6 8L17.5 12v16.5
-S     M34.5 15 32 12.5H23.5L21 15v2.6l2.5 2.5h8.5l2.5 2.5v3L32 28.1h-8.5L21 25.6
-```
-
----
-
-## Sociálna karta (OG image)
-
-`og.png` (1200×630) je to, čo sa reálne zobrazí pri zdieľaní odkazu — **PNG, nie SVG**,
-pretože Facebook, X ani LinkedIn SVG náhľady nezobrazujú.
-
-`og.svg` je editovateľný zdroj. Po jeho zmene treba PNG vyrenderovať nanovo, napr.:
-```bash
-# ľubovoľný nástroj, ktorý vie SVG → PNG v presnom rozmere 1200×630
-rsvg-convert -w 1200 -h 630 og.svg -o og.png
-```
-
-> **Poznámka k písmu:** `og.svg` používa `font-family="sans-serif"` a `"monospace"`,
-> nie Space Grotesk — aby sa karta dala vyrenderovať kdekoľvek bez inštalácie fontu.
-> Súčasné `og.png` je vyrenderované so systémovým sans-serifom. Ak chceš kartu presne
-> v písme webu, nainštaluj si lokálne **Space Grotesk** a **JetBrains Mono**, v `og.svg`
-> prepíš `font-family` na `"Space Grotesk"` / `"JetBrains Mono"` a vyrenderuj PNG nanovo.
-
----
-
-## Jazyky (SK / EN)
-
-Web je dvojjazyčný, prepínač je v navigácii vpravo hore, voľba sa ukladá do `localStorage`.
-
-- **Slovenčina je priamo v HTML** (zdroj pravdy).
-- **Angličtina je v objekte `EN = {…}`** v `<script>` na konci `index.html`.
-- Každý preložiteľný prvok má `data-i18n="kľúč"`.
-
-> **Keď meníš text, zmeň ho na oboch miestach** — v HTML aj v `EN`. Momentálne je
-> pokrytých všetkých **69 kľúčov**.
-
-Rýchla kontrola, či niektorý preklad nechýba:
-```bash
-python3 - <<'PY'
-import re
-s=open("index.html").read()
-html=set(re.findall(r'data-i18n="([^"]+)"',s))
-en=s[s.index("var EN = {"):]; en=en[:en.index("\n      };")]
-en=re.sub(r'"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*`','""',en)
-print("chýba v EN:", sorted(html-set(re.findall(r'([A-Za-z0-9_]+)\s*:',en))) or "nič")
-PY
-```
-
-Okrem `EN` sú dvojjazyčné ešte:
-- `WORDS` — rotujúce slovo v nadpise (písané po znakoch ako v termináli),
-- `CASE_LABELS` a `CASE_STUDIES` — obsah case-study dialógov.
-
----
-
-## Sekcie
-
-`hero` (+ HUD status panel) · `ticker` · `about` · `work` · `services` · `stack` · `contact` · `footer`
-
-### Projekty
-Sekcia „Vybraná práca" — screenshoty sú v `assets/`. Každá karta má náhľad, tagy a tri
-tlačidlá: **Detail** (case study), **Živá ukážka**, **Kód**. Náhľady sú v pokoji stlmené
-(`filter: saturate(.62) brightness(.72)`) a pri hoveri nabehnú do plnej farby.
-
-Výmena fotky = prehodiť súbor v `assets/` alebo zmeniť `src` v `<img>`.
-
-### Case studies
-**Detail →** otvorí natívny `<dialog>` so štruktúrou Problém → Čo som postavil → Stack →
-Stav + odkazy. Obsah je v objekte `CASE_STUDIES` (kľúče `pyro`, `osk`, `fkrajec`,
-`vantra`, každý s blokmi `sk` / `en`).
-
-Nový projekt = pridať kartu s `data-case="…"` + záznam do `CASE_STUDIES`.
-
-### HUD panel v hero
-Technický status vpravo hore (dostupnosť, lokalita, zameranie, stack, odozva) s
-prebiehajúcou skenovacou linkou. Texty majú `data-i18n`, takže sa prekladajú tiež.
-
----
-
-## Vlastná doména — `strananekm.com`
-
-Web je pripravený, chýba len prepnúť. Postup pre GitHub Pages:
-
-1. **Súbor `CNAME`** v koreni repozitára s jediným riadkom:
-   ```
-   strananekm.com
-   ```
-   > Pridaj ho až keď máš doménu kúpenú a DNS nastavené — inak GitHub Pages presmeruje
-   > na nefunkčnú adresu a web bude dovtedy nedostupný.
-
-2. **DNS u registrátora:**
-   | Typ | Názov | Hodnota |
-   |---|---|---|
-   | A | `@` | `185.199.108.153` |
-   | A | `@` | `185.199.109.153` |
-   | A | `@` | `185.199.110.153` |
-   | A | `@` | `185.199.111.153` |
-   | CNAME | `www` | `darkmaster9452.github.io` |
-
-3. V **Settings → Pages** nastav Custom domain a zapni **Enforce HTTPS**.
-
-4. **V `index.html` prepíš 4 adresy** (sú označené komentárom `═══ DOMÉNA ═══`):
-   `<link rel="canonical">`, `og:url`, `og:image` a `"url"` v JSON-LD —
-   všetky na `https://strananekm.com/`.
+Zvuk je predvolene vypnutý, prepína sa v docku a stav si `play()` číta priamo
+z `localStorage`. `SoundBinder.astro` napája hover a klik na celý dokument;
+hover len na zariadeniach s myšou (`pointer: fine`).
 
 ---
 
 ## Prístupnosť a výkon
 
-- `:focus-visible` rámiky, natívny `<dialog>`, `aria-*` popisky, sémantické značky.
-- `prefers-reduced-motion` vypína animácie, ticker aj efekt písania.
-- Vlastný kurzor a magnetické tlačidlá len na zariadeniach s myšou (`pointer: fine`).
-- Žiadny build, žiadny JS framework — len 2 fonty z Google Fonts.
+- Každá dlaždica je skutočný odkaz s viditeľným `:focus-visible` rámikom.
+- `prefers-reduced-motion` vypína prechod medzi stránkami aj animáciu avatara.
+- Zvuk je predvolene vypnutý; pípnutia generuje WebAudio, žiadne audio súbory.
+- Žiadny JS framework — len Astro a niekoľko krátkych skriptov.
 
-## Ako to spustiť lokálne
-```bash
-python3 -m http.server 8000   # potom http://localhost:8000
-```
+---
 
-## Stack
-Čisté HTML + CSS + vanilla JS. Písma: **Space Grotesk** (displej + UI),
-**JetBrains Mono** (technické popisky).
+## Poznámka k inšpirácii
+
+Layout, ladenie zvukov a sprite avatara vychádzajú z
+[gianmarcocavallo.com](https://gianmarcocavallo.com)
+([Ladvace/astro-bento-portfolio](https://github.com/Ladvace/astro-bento-portfolio), MIT).
+Kód je písaný nanovo; obsah, texty a projekty sú vlastné.
+
+> **Avatar:** `public/sprites/avatar-spin-*.webp` sú prevzaté z toho repozitára.
+> Zobrazujú jeho autora, nie Martina — pri výmene za vlastný sprite stačí prepísať
+> súbory rovnakých rozmerov (6×4, snímka 414×390 px).

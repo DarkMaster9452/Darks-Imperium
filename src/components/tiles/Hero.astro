@@ -1,0 +1,111 @@
+---
+import Panel from "../Panel.astro";
+import Avatar from "../Avatar.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Panel class="hero" pad="clamp(20px, 4vw, 40px)">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">{t("heroEyebrow")}</p>
+
+      <p class="lead">
+        {t("heroP1intro")} <strong>{t("heroName")}</strong> {t("heroP1rest")}
+      </p>
+      <p>{t("heroP2")}</p>
+      <p>{t("heroP3")}</p>
+      <p>{t("heroP4")}</p>
+
+      <div class="actions">
+        <a
+          class="icon-btn"
+          href="https://github.com/DarkMaster9452"
+          target="_blank"
+          rel="noopener"
+          aria-label={t("heroGithub")}
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/>
+          </svg>
+        </a>
+
+        <a class="icon-btn" href="mailto:strananekm@gmail.com" aria-label={t("heroEmail")}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+            <path d="m3.5 7 8.5 6 8.5-6"></path>
+          </svg>
+        </a>
+
+        <a class="cta" href="mailto:strananekm@gmail.com">{t("heroCta")}</a>
+      </div>
+    </div>
+
+    <Avatar alt={t("avatarAlt")} class="hero-avatar" />
+  </div>
+</Panel>
+
+<style>
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.55fr);
+    gap: 24px;
+    align-items: center;
+    height: 100%;
+  }
+
+  .hero-copy { max-width: 46ch; }
+
+  .hero-copy p { margin-bottom: 12px; color: var(--text-2); }
+  .hero-copy .eyebrow { margin-bottom: 14px; }
+  .hero-copy .lead { color: var(--text); }
+  .hero-copy strong { color: var(--text); font-weight: 600; }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+  }
+
+  .icon-btn,
+  .cta {
+    display: grid;
+    place-items: center;
+    height: 38px;
+    border: 1px solid var(--accent-line);
+    background: transparent;
+    transition:
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease);
+  }
+
+  .icon-btn { width: 44px; color: var(--text); }
+  .icon-btn svg { width: 17px; height: 17px; }
+
+  .cta {
+    padding-inline: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+
+  .icon-btn:hover,
+  .cta:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+  }
+</style>

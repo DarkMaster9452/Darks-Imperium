@@ -1,0 +1,109 @@
+---
+import Panel from "../Panel.astro";
+import { useTranslations, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const ACCENTS = [
+  { id: "crimson", hex: "#e11d48" },
+  { id: "amber", hex: "#f59e0b" },
+  { id: "blue", hex: "#3b82f6" },
+  { id: "violet", hex: "#a855f7" },
+  { id: "green", hex: "#22c55e" },
+];
+---
+
+<Panel class="accent-tile" pad="18px">
+  <fieldset>
+    <legend class="sr-only">{t("accentPick")}</legend>
+    <div class="swatches">
+      {
+        ACCENTS.map((a) => (
+          <button
+            type="button"
+            class="swatch"
+            data-accent-choice={a.id}
+            style={`--swatch:${a.hex}`}
+            aria-pressed={a.id === "crimson" ? "true" : "false"}
+          >
+            <span class="sr-only">{a.id}</span>
+          </button>
+        ))
+      }
+    </div>
+  </fieldset>
+</Panel>
+
+<style>
+  fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .swatches {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 40px;
+  }
+
+  .swatch {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: var(--swatch);
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .swatch:hover { transform: scale(1.12); }
+
+  /* Vybraná farba dostane prstenec vo farbe podkladu + obrys. */
+  .swatch[aria-pressed="true"] {
+    box-shadow:
+      0 0 0 2px var(--panel),
+      0 0 0 4px var(--swatch);
+  }
+</style>
+
+<script>
+  import { play, CHIME } from "../../lib/sound";
+
+  function setupAccent() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>("[data-accent-choice]");
+    if (!buttons.length) return;
+
+    const sync = (value: string) => {
+      buttons.forEach((b) =>
+        b.setAttribute("aria-pressed", String(b.dataset.accentChoice === value)),
+      );
+    };
+
+    // Inline skript v <head> už farbu nastavil — tu len dorovnáme stav tlačidiel.
+    sync(document.documentElement.dataset.accent ?? "crimson");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const value = button.dataset.accentChoice;
+        if (!value) return;
+        document.documentElement.dataset.accent = value;
+        sync(value);
+        play(CHIME);
+        try {
+          localStorage.setItem("accent", value);
+        } catch {
+          /* privátny režim — voľba neprežije reload, web funguje ďalej */
+        }
+      });
+    });
+  }
+
+  setupAccent();
+  document.addEventListener("astro:page-load", setupAccent);
+</script>

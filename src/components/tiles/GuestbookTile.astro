@@ -1,0 +1,36 @@
+---
+import LinkTile from "./LinkTile.astro";
+import { useTranslations, localizePath, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const dots = Array.from({ length: 8 * 16 }, (_, i) => i);
+---
+
+<LinkTile href={localizePath("/guestbook", lang)} title={t("guestbookTile")} class="gb-tile">
+  <div class="dots" aria-hidden="true">
+    {dots.map((i) => <i style={`--o:${0.25 + ((i * 37) % 60) / 100}`} />)}
+  </div>
+</LinkTile>
+
+<style>
+  .dots {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 4px;
+    height: 100%;
+    padding: 12px;
+  }
+
+  .dots i {
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: var(--o);
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .gb-tile:hover .dots i { opacity: calc(var(--o) + 0.25); }
+</style>

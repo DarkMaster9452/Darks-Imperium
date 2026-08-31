@@ -1,0 +1,110 @@
+---
+/**
+  * Plávajúce ovládanie vpravo dole — jazyk a zvuk.
+ * Akcentová farba má vlastnú dlaždicu na doske, tu je len zvyšok.
+ */
+import type { Lang } from "../i18n/utils";
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+  lang: Lang;
+  otherHref: string;
+  otherLabel: string;
+}
+const { lang, otherHref, otherLabel } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="dock">
+  <a class="dock-btn" href={otherHref} aria-label={otherLabel} data-astro-prefetch>
+    <span class="lang">{lang === "sk" ? "EN" : "SK"}</span>
+  </a>
+
+  <button class="dock-btn" type="button" data-toggle="sound" aria-pressed="false" title={t("dockSound")}>
+    <span class="sr-only">{t("dockSound")}</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 9v6h4l5 4V5L8 9z"></path>
+      <path class="wave" d="M16.5 9.5a3.5 3.5 0 0 1 0 5"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .dock {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 50;
+    display: grid;
+    gap: 6px;
+  }
+
+  .dock-btn {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: var(--text-2);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .dock-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-line);
+  }
+  .dock-btn svg { width: 15px; height: 15px; }
+
+  .lang {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+
+  /* Vypnutý stav — prečiarknuté a stlmené. */
+  .dock-btn[aria-pressed="false"] { opacity: 0.5; }
+  .dock-btn[data-toggle="sound"][aria-pressed="false"] .wave { display: none; }
+</style>
+
+<script>
+  import { play, CHIME } from "../lib/sound";
+
+  function read(key: string, fallback: string) {
+    try {
+      return localStorage.getItem(key) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function write(key: string, value: string) {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      /* privátny režim — voľba proste neprežije reload */
+    }
+  }
+
+  function setupDock() {
+    const soundBtn = document.querySelector<HTMLButtonElement>('[data-toggle="sound"]');
+    if (!soundBtn) return;
+
+    let soundOn = read("sound", "off") === "on";
+    soundBtn.setAttribute("aria-pressed", String(soundOn));
+
+    soundBtn.addEventListener("click", () => {
+      soundOn = !soundOn;
+      soundBtn.setAttribute("aria-pressed", String(soundOn));
+      write("sound", soundOn ? "on" : "off");
+      // Zapnutie potvrdíme zvukom; vypnutie má ostať ticho.
+      if (soundOn) play(CHIME);
+    });
+  }
+
+  setupDock();
+  document.addEventListener("astro:page-load", setupDock);
+</script>

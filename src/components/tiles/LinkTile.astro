@@ -1,0 +1,74 @@
+---
+/**
+ * Dlaždica, ktorá vedie na podstránku: názov dole vľavo, šípka vpravo hore
+ * a voliteľná grafika na pozadí.
+ *
+ * Rozloženie drží vlastný `.tile`, nie Panelovo `.panel-in` — trieda odovzdaná
+ * do Panelu patrí do jeho scope, takže selektor odtiaľto by na ňu nedosiahol.
+ */
+import Panel from "../Panel.astro";
+
+interface Props {
+  href: string;
+  title: string;
+  class?: string;
+}
+const { href, title, class: className = "" } = Astro.props;
+---
+
+<Panel href={href} label={title} class:list={["link-tile", className]} pad="0">
+  <div class="tile">
+    <div class="art"><slot /></div>
+
+    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M7 17 17 7"></path>
+      <path d="M8 7h9v9"></path>
+    </svg>
+
+    <h2 class="label">{title}</h2>
+  </div>
+</Panel>
+
+<style>
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    /* Nízko — na doske dostane dlaždica aj jediný riadok mriežky a nadpis
+       nesmie vypadnúť pod orezanie. */
+    min-height: 76px;
+    overflow: hidden;
+  }
+
+  .art {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 15px;
+    height: 15px;
+    color: var(--text-2);
+    transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .label {
+    position: relative;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-shadow: 0 1px 12px var(--bg);
+  }
+
+  :global(.panel:hover) .arrow {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+</style>
