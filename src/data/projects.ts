@@ -13,7 +13,8 @@ export interface Project {
   slug: string;
   img: string;
   live: string;
-  code: string;
+  /** Klientske projekty majú súkromný repozitár — vtedy odkaz na kód chýba. */
+  code?: string;
   concept: boolean;
   year: string;
   stack: string[];
@@ -106,42 +107,45 @@ export const projects: Project[] = [
     },
   },
   {
-    slug: "fkrajec",
-    img: "/assets/fkrajec.webp",
-    live: "https://darkmaster9452.github.io/FK-Rajec-Web-Koncept/",
-    code: "https://github.com/DarkMaster9452/FK-Rajec-Web-Koncept",
-    concept: true,
+    slug: "dravio",
+    // TODO: nahradiť screenshotom z dravio.sk (public/assets/dravio.webp)
+    img: "/assets/thumb-fallback.svg",
+    live: "https://dravio.sk",
+    // Klientsky projekt — repozitár je súkromný, odkaz na kód zámerne chýba.
+    concept: false,
     year: "2026",
-    stack: ["Next.js 15", "shadcn/ui", "Tailwind v4", "Prisma", "Neon", "NextAuth"],
+    stack: ["Next.js", "Web dizajn", "SEO", "Vercel"],
     sk: {
-      title: "FK Rajec",
-      role: "Dizajn + vývoj · koncept",
+      title: "DRAVIO s.r.o.",
+      role: "Dizajn + vývoj · klientsky web",
       summary:
-        "Oficiálny web futbalového klubu — koncept. Next.js 15, shadcn/ui a Tailwind v4, s Prismou, Neon PostgreSQL a prihlásením cez NextAuth. Novinky, súpisky, zápasy a admin panel.",
+        "Web firmy na výkopové a demolačné práce v Rajeckej doline. Prehľad služieb, jasný postup objednávky, realizácie a kontakt s bezplatnou obhliadkou.",
       problem:
-        "Ako by mohol vyzerať moderný oficiálny web futbalového klubu, postavený na dnešnom stacku?",
+        "Firma robiaca výkopy, demolácie a zemné práce potrebovala web, cez ktorý ju zákazník v regióne nájde a hneď vie, čo ponúka a ako si ju objednať.",
       solution: [
-        "Klubové novinky, súpisky a rozpis zápasov",
-        "Admin panel na správu obsahu",
-        "Prihlásenie cez NextAuth",
-        "Dáta cez Prisma + Neon PostgreSQL",
+        "Prehľad služieb — demolačné a búracie práce, výkopy a zemné práce, odvoz odpadov kontajnermi, nákladná doprava, kosenie a mulčovanie",
+        "Postup spolupráce v štyroch krokoch: kontakt → obhliadka → realizácia → odovzdanie",
+        "Sekcia realizácií a dôvodov, prečo si firmu vybrať",
+        "Kontakt s telefónom a otváracími hodinami priamo v hlavičke aj v päte",
+        "SEO cielené na región — Rajec, Rajecká dolina a okolie Žiliny",
       ],
-      outcome: "Funkčný koncept nasadený na GitHub Pages.",
+      outcome: "Nasadené a bežiace na vlastnej doméne dravio.sk.",
     },
     en: {
-      title: "FK Rajec",
-      role: "Design + build · concept",
+      title: "DRAVIO s.r.o.",
+      role: "Design + build · client work",
       summary:
-        "The official football club website — a concept. Next.js 15, shadcn/ui and Tailwind v4, with Prisma, Neon PostgreSQL and NextAuth login. Club news, rosters, matches and an admin panel.",
+        "A website for an excavation and demolition company in the Rajec valley. Services, a clear booking flow, past jobs and contact details with a free site visit.",
       problem:
-        "What could a modern official football-club website look like, built on today's stack?",
+        "A company doing excavation, demolition and earthworks needed a site that customers in the region could find, and that made the offer and the booking process obvious.",
       solution: [
-        "Club news, rosters and a match schedule",
-        "An admin panel for managing content",
-        "Login via NextAuth",
-        "Data through Prisma + Neon PostgreSQL",
+        "Services overview — demolition, excavation and earthworks, container waste removal, haulage, mowing and mulching",
+        "A four-step booking flow: contact → site visit → the work → handover",
+        "A past-jobs section and the reasons to pick the company",
+        "Phone number and opening hours in both the header and the footer",
+        "Regional SEO — Rajec, the Rajec valley and the area around Žilina",
       ],
-      outcome: "A working concept deployed on GitHub Pages.",
+      outcome: "Deployed and running on its own domain, dravio.sk.",
     },
   },
   {

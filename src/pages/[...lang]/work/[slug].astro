@@ -70,7 +70,13 @@ const c = project[lang];
       <a class="btn primary" href={project.live} target="_blank" rel="noopener">
         {t("caseLive")} ↗
       </a>
-      <a class="btn" href={project.code} target="_blank" rel="noopener">{t("caseCode")} →</a>
+      {
+        project.code && (
+          <a class="btn" href={project.code} target="_blank" rel="noopener">
+            {t("caseCode")} →
+          </a>
+        )
+      }
     </div>
   </article>
 </SubPage>

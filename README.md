@@ -45,7 +45,7 @@ public/                   screenshoty, favicon, og.png, sprites/
 |---|---|---|
 | `/` | `/en` | bento doska |
 | `/work` | `/en/work` | všetky projekty + služby |
-| `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `fkrajec`, `vantra`) |
+| `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `dravio`, `vantra`) |
 | `/guestbook` | `/en/guestbook` | návštevná kniha |
 | `/playground` | `/en/playground` | canvas experiment |
 
@@ -76,7 +76,12 @@ Slovenčina je na koreňových cestách, angličtina pod `/en`. Preklady sú v
 neprejde `npm run check` ani buildom.** Netreba na to žiadny skript.
 
 Texty projektov a case studies sú dvojjazyčné priamo v `src/data/projects.ts`
-(bloky `sk` a `en` pri každom projekte).
+(bloky `sk` a `en` pri každom projekte). `code` je voliteľné — klientske projekty
+so súkromným repozitárom tlačidlo na kód jednoducho nemajú.
+
+Náhľady projektov sú v `public/assets/`. **DRAVIO zatiaľ používa zástupný
+`thumb-fallback.svg`** — keď budeš mať screenshot z dravio.sk, ulož ho ako
+`public/assets/dravio.webp` a prepíš `img` v `projects.ts`.
 
 ---
 

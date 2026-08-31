@@ -55,7 +55,7 @@ export const en: Record<keyof typeof sk, string> = {
 
   workTitle: "Selected work",
   workIntro:
-    "Real projects from my GitHub. Open a project for the case study; the live demo and the code are always one click away.",
+    "Real projects — client sites and my own concepts. Open one for the case study and a live demo; the code is there for the projects with a public repo.",
   workAll: "All repositories on GitHub",
   servicesTitle: "What I can do for you",
   svc1H: "Web design",

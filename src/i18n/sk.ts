@@ -68,7 +68,7 @@ export const sk = {
   // ── stránka projektov ─────────────────────────────────────────────────
   workTitle: "Vybraná práca",
   workIntro:
-    "Reálne projekty z môjho GitHubu. Kliknite na projekt a otvorí sa case study; živá ukážka aj kód sú vždy po ruke.",
+    "Reálne projekty — klientske weby aj vlastné koncepty. Kliknite na projekt a otvorí sa case study so živou ukážkou; kód je pri projektoch s verejným repozitárom.",
   workAll: "Všetky repozitáre na GitHube",
   servicesTitle: "Čo pre vás spravím",
   svc1H: "Web dizajn",
