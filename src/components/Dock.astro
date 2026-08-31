@@ -71,29 +71,7 @@ const t = useTranslations(lang);
 </style>
 
 <script>
-  /**
-   * Krátke pípnutia cez WebAudio — žiadne zvukové súbory. Kontext sa vytvára až
-   * pri prvom kliknutí, inak ho prehliadač aj tak nepustí.
-   */
-  let audio: AudioContext | null = null;
-
-  function blip(freq: number, ms: number, gain = 0.03) {
-    try {
-      audio ??= new AudioContext();
-      if (audio.state === "suspended") void audio.resume();
-      const osc = audio.createOscillator();
-      const vol = audio.createGain();
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      vol.gain.setValueAtTime(gain, audio.currentTime);
-      vol.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + ms / 1000);
-      osc.connect(vol).connect(audio.destination);
-      osc.start();
-      osc.stop(audio.currentTime + ms / 1000);
-    } catch {
-      /* zvuk je nadstavba — keď sa nedá, ticho pokračujeme */
-    }
-  }
+  import { play, CHIME } from "../lib/sound";
 
   function read(key: string, fallback: string) {
     try {
@@ -113,23 +91,17 @@ const t = useTranslations(lang);
 
   function setupDock() {
     const soundBtn = document.querySelector<HTMLButtonElement>('[data-toggle="sound"]');
+    if (!soundBtn) return;
 
     let soundOn = read("sound", "off") === "on";
+    soundBtn.setAttribute("aria-pressed", String(soundOn));
 
-    soundBtn?.setAttribute("aria-pressed", String(soundOn));
-
-    soundBtn?.addEventListener("click", () => {
+    soundBtn.addEventListener("click", () => {
       soundOn = !soundOn;
       soundBtn.setAttribute("aria-pressed", String(soundOn));
       write("sound", soundOn ? "on" : "off");
-      if (soundOn) blip(880, 70);
-    });
-
-    // Kliky na dlaždice a odkazy — jemné cvaknutie, len keď je zvuk zapnutý.
-    document.addEventListener("click", (e) => {
-      if (!soundOn) return;
-      const target = e.target as HTMLElement | null;
-      if (target?.closest("a, button")) blip(520, 45, 0.02);
+      // Zapnutie potvrdíme zvukom; vypnutie má ostať ticho.
+      if (soundOn) play(CHIME);
     });
   }
 

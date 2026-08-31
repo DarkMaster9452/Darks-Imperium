@@ -6,7 +6,7 @@ import Contact from "../../components/tiles/Contact.astro";
 import Clock from "../../components/tiles/Clock.astro";
 import Now from "../../components/tiles/Now.astro";
 import WorkTile from "../../components/tiles/WorkTile.astro";
-import PlaygroundTile from "../../components/tiles/PlaygroundTile.astro";
+import CvTile from "../../components/tiles/CvTile.astro";
 import GuestbookTile from "../../components/tiles/GuestbookTile.astro";
 import Accent from "../../components/tiles/Accent.astro";
 import Footer from "../../components/tiles/Footer.astro";
@@ -28,7 +28,7 @@ const { lang } = Astro.props as { lang: Lang };
     <div class="area-clock"><Clock lang={lang} /></div>
     <div class="area-work"><WorkTile lang={lang} /></div>
     <div class="area-now"><Now lang={lang} /></div>
-    <div class="area-play"><PlaygroundTile lang={lang} /></div>
+    <div class="area-cv"><CvTile lang={lang} /></div>
     <div class="area-guest"><GuestbookTile lang={lang} /></div>
     <div class="area-accent"><Accent lang={lang} /></div>
     <div class="area-footer"><Footer lang={lang} /></div>
@@ -50,8 +50,8 @@ const { lang } = Astro.props as { lang: Lang };
       "hero    hero  hero  stack"
       "contact clock work  stack"
       "contact clock work  stack"
-      "contact clock now   accent"
-      "contact play  guest footer";
+      "contact cv    now   accent"
+      "contact cv    guest footer";
   }
 
   @media (min-width: 1200px) {
@@ -67,7 +67,7 @@ const { lang } = Astro.props as { lang: Lang };
   .area-clock { grid-area: clock; }
   .area-work { grid-area: work; }
   .area-now { grid-area: now; }
-  .area-play { grid-area: play; }
+  .area-cv { grid-area: cv; }
   .area-guest { grid-area: guest; }
   .area-accent { grid-area: accent; }
   .area-footer { grid-area: footer; }
@@ -83,7 +83,7 @@ const { lang } = Astro.props as { lang: Lang };
         "stack   stack"
         "contact clock"
         "work    now"
-        "play    guest"
+        "cv      guest"
         "accent  footer";
     }
   }
@@ -96,7 +96,7 @@ const { lang } = Astro.props as { lang: Lang };
         "clock"
         "work"
         "now"
-        "play"
+        "cv"
         "guest"
         "stack"
         "contact"

@@ -9,20 +9,14 @@ const year = new Date().getFullYear();
 ---
 
 <Panel as="section" class="footer-tile" pad="18px">
-  <p>
-    © {year} Martin Straňanek · {t("footerNote")}
-    <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
-  </p>
+  <p>© {year} Martin Straňanek · {t("footerNote")}</p>
 </Panel>
 
 <style>
-  .footer-tile :global(.panel-in) {
-    display: grid;
-    place-items: center;
-    min-height: 100%;
-  }
-
   p {
+    display: grid;
+    place-content: center;
+    height: 100%;
     font-size: 11px;
     line-height: 1.6;
     text-align: center;

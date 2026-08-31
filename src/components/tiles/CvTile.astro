@@ -1,0 +1,48 @@
+---
+import LinkTile from "./LinkTile.astro";
+import { useTranslations, localizePath, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+/** Naznačené riadky dokumentu — šírky sú pevné, aby build nebol náhodný. */
+const lines = [92, 74, 84, 60, 88, 70, 46];
+---
+
+<LinkTile href={localizePath("/cv", lang)} title={t("cvTile")} class="cv-tile">
+  <div class="sheet" aria-hidden="true">
+    <span class="head"></span>
+    {lines.map((w) => <span class="line" style={`--w:${w}%`} />)}
+  </div>
+</LinkTile>
+
+<style>
+  .sheet {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    height: 100%;
+    padding: 16px 18px 44px;
+  }
+
+  .head {
+    width: 38%;
+    height: 9px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.9;
+    transition: background var(--dur) var(--ease);
+  }
+
+  .line {
+    width: var(--w);
+    height: 5px;
+    background: var(--line-strong);
+    border-radius: 2px;
+    opacity: 0.55;
+    transition: opacity var(--dur) var(--ease);
+  }
+
+  .cv-tile:hover .line { opacity: 0.8; }
+</style>

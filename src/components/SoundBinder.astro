@@ -1,0 +1,46 @@
+---
+/**
+ * Napojí zvuky na celý dokument — hover kariet a kliky na odkazy či tlačidlá.
+ * Prepínač v docku len prepisuje localStorage; `play()` si stav vypýta sám,
+ * takže tu netreba nič synchronizovať.
+ */
+---
+
+<script>
+  import { play, CARD_HOVER, CLICK } from "../lib/sound";
+
+  function bindSound() {
+    // Zvuk je zbytočný tam, kde sa nedá „prejsť myšou" (dotykové zariadenia).
+    const fine = window.matchMedia("(pointer: fine)").matches;
+
+    const onOver = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      const panel = target?.closest<HTMLElement>(".panel");
+      if (!panel) return;
+      // mouseover bubluje aj pri prechode medzi deťmi tej istej karty.
+      const from = (event as MouseEvent).relatedTarget as Node | null;
+      if (from && panel.contains(from)) return;
+      play(CARD_HOVER);
+    };
+
+    const onClick = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("a, button")) play(CLICK);
+    };
+
+    if (fine) document.addEventListener("mouseover", onOver);
+    document.addEventListener("click", onClick);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        document.removeEventListener("mouseover", onOver);
+        document.removeEventListener("click", onClick);
+      },
+      { once: true },
+    );
+  }
+
+  bindSound();
+  document.addEventListener("astro:page-load", bindSound);
+</script>

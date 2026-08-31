@@ -43,33 +43,29 @@
   color-scheme: dark;
 }
 
-/* Avatar: rotujúci sprite sheet 6×4 (24 snímok), vlastný súbor pre každý akcent.
-   Kým súbory nie sú v public/sprites/, je --avatar-sheet `none` a v heroi ostane
-   vyhradené prázdne miesto — bez chýbajúcich requestov.
-
-   Ako ho zapnúť: nahraj avatar-spin-<akcent>.webp do public/sprites/ a odkomentuj
-   riadok --avatar-sheet v príslušnom bloku nižšie. */
-:root { --avatar-sheet: none; }
+/* Avatar: rotujúci sprite sheet 6×4 (24 snímok), vlastný súbor pre každý akcent,
+   aby postava mala vždy farbu témy. */
+:root { --avatar-sheet: url("/sprites/avatar-spin-crimson.webp"); }
 
 [data-accent="crimson"] {
   --accent: #e63946;
-  /* --avatar-sheet: url("/sprites/avatar-spin-crimson.webp"); */
+  --avatar-sheet: url("/sprites/avatar-spin-crimson.webp");
 }
 [data-accent="amber"] {
   --accent: #ffeb3b;
   --accent-ink: #1a1200;
-  /* --avatar-sheet: url("/sprites/avatar-spin-amber.webp"); */
+  --avatar-sheet: url("/sprites/avatar-spin-amber.webp");
 }
 [data-accent="blue"] {
   --accent: #2196f3;
-  /* --avatar-sheet: url("/sprites/avatar-spin-blue.webp"); */
+  --avatar-sheet: url("/sprites/avatar-spin-blue.webp");
 }
 [data-accent="violet"] {
   --accent: #9c27b0;
-  /* --avatar-sheet: url("/sprites/avatar-spin-violet.webp"); */
+  --avatar-sheet: url("/sprites/avatar-spin-violet.webp");
 }
 [data-accent="green"] {
   --accent: #66bb6a;
   --accent-ink: #04220f;
-  /* --avatar-sheet: url("/sprites/avatar-spin-green.webp"); */
+  --avatar-sheet: url("/sprites/avatar-spin-green.webp");
 }

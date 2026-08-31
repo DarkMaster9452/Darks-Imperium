@@ -9,6 +9,7 @@ import { ClientRouter } from "astro:transitions";
 import { useTranslations, otherLang, localizePath, type Lang } from "../i18n/utils";
 import PixelWipe from "../components/PixelWipe.astro";
 import Dock from "../components/Dock.astro";
+import SoundBinder from "../components/SoundBinder.astro";
 
 interface Props {
   lang: Lang;
@@ -92,6 +93,7 @@ const otherHref = localizePath(path, other);
     </main>
 
     <Dock lang={lang} otherHref={otherHref} otherLabel={t("langSwitchTo")} />
+    <SoundBinder />
 
     <style>
       .board {

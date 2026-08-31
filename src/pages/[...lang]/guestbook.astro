@@ -253,6 +253,8 @@ const labels = {
 </style>
 
 <script>
+  import { play, SENT } from "../../lib/sound";
+
   interface Entry {
     id: number;
     name: string;
@@ -403,6 +405,7 @@ const labels = {
         if (res.ok) {
           form.reset();
           setMessage(labels.thanks ?? "");
+          play(SENT);
           page = 1;
           await load();
         } else {

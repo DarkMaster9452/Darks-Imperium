@@ -35,7 +35,9 @@ src/
   layouts/SubPage.astro   rám podstránok (Späť + nadpis)
   components/             Panel, Avatar, Dock, PixelWipe + dlaždice v tiles/
   pages/[...lang]/        doska a podstránky pre oba jazyky
+  lib/sound.ts            krátke tóny (hover, klik, akord, odoslanie)
   pages/api/guestbook.ts  GET + POST návštevnej knihy
+  pages/api/contact.ts    POST kontaktného formulára
 public/                   screenshoty, favicon, og.png, sprites/
 ```
 
@@ -47,7 +49,7 @@ public/                   screenshoty, favicon, og.png, sprites/
 | `/work` | `/en/work` | všetky projekty + služby |
 | `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `dravio`, `vantra`) |
 | `/guestbook` | `/en/guestbook` | návštevná kniha |
-| `/playground` | `/en/playground` | canvas experiment |
+| `/cv` | `/en/cv` | životopis + kontaktný formulár |
 
 ---
 
@@ -112,24 +114,40 @@ Ochrany v `src/pages/api/guestbook.ts`:
   samotná IP adresa**,
 - odkazy sa vykresľujú cez `textContent`, nikdy `innerHTML`.
 
-Bez `DATABASE_URL` sa API tvári ako nedostupné (503) a stránka to slušne oznámi —
-build ani zvyšok webu to nepoloží.
+Kontaktný formulár na `/cv` používa rovnaké ochrany a vlastnú tabuľku:
+
+```sql
+create table contact_messages (
+  id bigserial primary key,
+  name text not null check (char_length(name) between 1 and 60),
+  email text not null check (char_length(email) between 3 and 120),
+  message text not null check (char_length(message) between 1 and 2000),
+  lang text not null default 'sk',
+  ip_hash text not null,
+  created_at timestamptz not null default now()
+);
+```
+
+Správy z formulára si prečítaš v Neon konzole:
+`select created_at, name, email, message from contact_messages order by created_at desc;`
+
+Bez `DATABASE_URL` sa obe API tvária ako nedostupné (503) a stránka to slušne
+oznámi — build ani zvyšok webu to nepoloží.
 
 ---
 
 ## Avatar
 
-V heroi je vyhradené miesto pre **rotujúci avatar**: sprite sheet 6×4 (24 snímok),
-prehrávaný dvoma CSS animáciami — rýchlejšia prechádza stĺpce, pomalšia riadky.
+V heroi sa točí avatar zo sprite sheetu **6×4 (24 snímok po 414×390 px)**. Hrajú ho
+dve CSS animácie naraz: rýchlejšia prechádza stĺpce v riadku, pomalšia posúva na
+ďalší riadok.
 
-Zapnutie:
+Pozor na percentá: `background-position` v percentách sa počíta z *rozdielu*
+veľkostí pozadia a prvku, nie zo šírky prvku. Preto animácia beží od `0 %` do
+`100 %` s `steps(n, jump-none)` — nie na násobky `-100 %`.
 
-1. nahraj `avatar-spin-<akcent>.webp` do `public/sprites/`
-   (`crimson`, `amber`, `blue`, `violet`, `green`),
-2. odkomentuj `--avatar-sheet` v príslušných blokoch v `src/styles/tokens.css`.
-
-Kým súbory nie sú, `--avatar-sheet` je `none`, miesto ostane prázdne a nerobia sa
-žiadne zbytočné requesty. Rozmery a časovanie sú v `src/components/Avatar.astro`.
+Sheet pre každý akcent je v `public/sprites/avatar-spin-<akcent>.webp` a vyberá ho
+premenná `--avatar-sheet` v `tokens.css`, takže postava má vždy farbu témy.
 
 ---
 
@@ -140,6 +158,23 @@ V *Settings → Environment Variables* musia byť `DATABASE_URL` a `GUESTBOOK_SA
 
 Doména `strananekm.com` je nastavená ako `site` v `astro.config.mjs` — z nej sa
 odvodzuje `canonical`, `og:url`, `og:image` aj `hreflang`.
+
+---
+
+## Zvuk
+
+`src/lib/sound.ts` skladá krátke tóny cez WebAudio — žiadne audio súbory:
+
+| Tón | Kedy |
+|---|---|
+| `CARD_HOVER` | prejdenie myšou po karte |
+| `CLICK` | klik na odkaz alebo tlačidlo |
+| `CHIME` | prepnutie akcentovej farby, zapnutie zvuku |
+| `SENT` | odoslaný odkaz alebo správa |
+
+Zvuk je predvolene vypnutý, prepína sa v docku a stav si `play()` číta priamo
+z `localStorage`. `SoundBinder.astro` napája hover a klik na celý dokument;
+hover len na zariadeniach s myšou (`pointer: fine`).
 
 ---
 
@@ -154,6 +189,11 @@ odvodzuje `canonical`, `og:url`, `og:image` aj `hreflang`.
 
 ## Poznámka k inšpirácii
 
-Layout a interakcie vychádzajú z [gianmarcocavallo.com](https://gianmarcocavallo.com)
+Layout, ladenie zvukov a sprite avatara vychádzajú z
+[gianmarcocavallo.com](https://gianmarcocavallo.com)
 ([Ladvace/astro-bento-portfolio](https://github.com/Ladvace/astro-bento-portfolio), MIT).
-Kód tu je písaný nanovo; obsah, texty a projekty sú vlastné.
+Kód je písaný nanovo; obsah, texty a projekty sú vlastné.
+
+> **Avatar:** `public/sprites/avatar-spin-*.webp` sú prevzaté z toho repozitára.
+> Zobrazujú jeho autora, nie Martina — pri výmene za vlastný sprite stačí prepísať
+> súbory rovnakých rozmerov (6×4, snímka 414×390 px).

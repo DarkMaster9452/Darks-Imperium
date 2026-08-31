@@ -30,7 +30,9 @@ const c = project[lang];
 >
   <article class="case">
     <Panel pad="0" class="shot">
-      <img src={project.img} alt="" width="1200" height="750" decoding="async" />
+      <figure class="shot-figure">
+        <img src={project.img} alt="" width="1200" height="750" decoding="async" />
+      </figure>
     </Panel>
 
     <dl class="meta">
@@ -87,7 +89,7 @@ const c = project[lang];
     margin-inline: auto;
   }
 
-  .shot :global(.panel-in) { padding: 0; }
+  .shot-figure { overflow: hidden; }
   .shot img {
     width: 100%;
     height: clamp(220px, 34vw, 400px);

@@ -73,6 +73,8 @@ const ACCENTS = [
 </style>
 
 <script>
+  import { play, CHIME } from "../../lib/sound";
+
   function setupAccent() {
     const buttons = document.querySelectorAll<HTMLButtonElement>("[data-accent-choice]");
     if (!buttons.length) return;
@@ -92,6 +94,7 @@ const ACCENTS = [
         if (!value) return;
         document.documentElement.dataset.accent = value;
         sync(value);
+        play(CHIME);
         try {
           localStorage.setItem("accent", value);
         } catch {

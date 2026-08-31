@@ -59,11 +59,11 @@ export const sk = {
 
   // ── dlaždice ──────────────────────────────────────────────────────────
   workTile: "Vybraná práca",
-  playgroundTile: "Ihrisko",
+  cvTile: "Životopis",
   guestbookTile: "Návštevná kniha",
   accentTile: "Farba akcentu",
   accentPick: "Vybrať akcentovú farbu:",
-  footerNote: "Navrhnuté a postavené na Slovensku.",
+  footerNote: "Ručne navrhnuté a postavené na Slovensku.",
 
   // ── stránka projektov ─────────────────────────────────────────────────
   workTitle: "Vybraná práca",
@@ -117,10 +117,34 @@ export const sk = {
   gbErrGeneric: "Odkaz sa nepodarilo uložiť. Skúste to o chvíľu.",
   gbOffline: "Návštevná kniha je momentálne nedostupná.",
 
-  // ── ihrisko ───────────────────────────────────────────────────────────
-  pgTitle: "Ihrisko",
-  pgSub: "Malé experimenty s canvasom. Pohnite myšou po mriežke.",
-  pgHint: "Pohnite myšou · kliknutím zmeníte hustotu",
+  // ── životopis a kontaktný formulár ────────────────────────────────────
+  cvTitle: "Životopis",
+  cvSub: "Kto som, s čím pracujem a čo som postavil. Napíšte mi rovno z tejto stránky.",
+  cvProfile: "Profil",
+  cvServices: "Čo robím",
+  cvSkills: "Zručnosti",
+  cvProjects: "Vybrané projekty",
+  cvContactBlock: "Kontakt",
+  cvPrint: "Stiahnuť ako PDF",
+  cvPrintHint: "Otvorí tlač prehliadača — vyberte „Uložiť ako PDF“.",
+
+  ctTitle: "Napíšte mi",
+  ctSub: "Odpoviem väčšinou do 24 hodín.",
+  ctName: "Meno",
+  ctNamePh: "Vaše meno",
+  ctEmail: "E-mail",
+  ctEmailPh: "vas@email.sk",
+  ctMessage: "Správa",
+  ctMessagePh: "S čím vám môžem pomôcť?",
+  ctSend: "Odoslať správu",
+  ctSending: "Odosielam…",
+  ctThanks: "Ďakujem, správa dorazila. Ozvem sa čo najskôr.",
+  ctErrName: "Vyplňte meno.",
+  ctErrEmail: "Zadajte platný e-mail.",
+  ctErrMessage: "Napíšte správu.",
+  ctErrRate: "Ešte chvíľu — jedna správa za 10 minút, prosím.",
+  ctErrGeneric: "Správu sa nepodarilo odoslať. Skúste to znova alebo napíšte na e-mail.",
+  ctOffline: "Formulár je momentálne nedostupný — napíšte mi prosím na e-mail.",
 
   // ── ovládanie (dock) ──────────────────────────────────────────────────
   dockTheme: "Zmeniť akcentovú farbu",

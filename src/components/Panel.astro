@@ -79,12 +79,14 @@ const attrs = href ? { href, "aria-label": label, "data-astro-prefetch": "hover"
     border-bottom-width: 1px;
   }
 
-  .panel.is-interactive:hover,
-  .panel.is-interactive:focus-visible {
+  /* Rámik sa rozsvieti na každej karte, nielen na klikateľnej — doska tak
+     reaguje celá. */
+  .panel:hover,
+  .panel:focus-visible {
     border-color: var(--accent);
   }
-  .panel.is-interactive:hover .nub,
-  .panel.is-interactive:focus-visible .nub {
+  .panel:hover .nub,
+  .panel:focus-visible .nub {
     border-color: var(--accent);
   }
   .panel.is-interactive:focus-visible {

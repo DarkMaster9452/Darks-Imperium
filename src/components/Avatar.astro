@@ -1,12 +1,11 @@
 ---
 /**
- * Rotujúci avatar — sprite sheet 6×4 (24 snímok), prehrávaný cez steps():
- * riadok po riadku sa posúva pozadie, takže postava sa plynulo otočí dokola.
+ * Rotujúci avatar — sprite sheet 6×4 (24 snímok, jedna 414×390 px), prehrávaný
+ * dvoma CSS animáciami: rýchlejšia prechádza stĺpce v riadku, pomalšia posúva
+ * na ďalší riadok. Spolu prejdú celú otáčku.
  *
- * Súbor sa vyberá podľa akcentu premennou --avatar-sheet (definovaná v
- * tokens.css pre každý [data-accent]), takže sa avatar prefarbí spolu s webom.
- * Kým sheet v public/sprites/ nie je, dlaždica drží prázdne miesto a nič sa
- * nerozsype.
+ * Sheet sa vyberá premennou --avatar-sheet (tokens.css) podľa akcentu, takže
+ * postava má vždy farbu témy.
  */
 interface Props {
   alt: string;
@@ -15,17 +14,18 @@ interface Props {
   duration?: string;
 }
 
-const { alt, class: className = "", duration = "3.2s" } = Astro.props;
+const { alt, class: className = "", duration = "4s" } = Astro.props;
 
 const COLS = 6;
 const ROWS = 4;
+const FRAME_RATIO = 414 / 390;
 ---
 
 <div
   class:list={["avatar", className]}
   role="img"
   aria-label={alt}
-  style={`--cols:${COLS};--rows:${ROWS};--dur:${duration}`}
+  style={`--cols:${COLS};--rows:${ROWS};--spin:${duration};--ratio:${FRAME_RATIO}`}
 >
   <span class="sprite"></span>
 </div>
@@ -33,7 +33,7 @@ const ROWS = 4;
 <style>
   .avatar {
     display: grid;
-    place-items: center end;
+    place-items: center;
     width: 100%;
     height: 100%;
     min-height: 180px;
@@ -41,33 +41,39 @@ const ROWS = 4;
 
   .sprite {
     display: block;
-    width: calc(var(--sprite-h, 220px) * 0.86);
-    height: var(--sprite-h, 220px);
+    height: var(--sprite-h, 240px);
+    width: calc(var(--sprite-h, 240px) * var(--ratio));
 
-    /* Sheet je 6×4 — pozadie zväčšíme 6× na šírku a 4× na výšku, aby jedna
-       „bunka" presne vyplnila prvok. */
     background-image: var(--avatar-sheet);
     background-repeat: no-repeat;
+    /* 6×4 mriežka: pozadie roztiahneme tak, aby jedna bunka vyplnila prvok. */
     background-size: calc(var(--cols) * 100%) calc(var(--rows) * 100%);
     background-position: 0 0;
-    image-rendering: pixelated;
 
-    /* Dve animácie naraz: rýchlejšia prechádza stĺpce v riadku, pomalšia
-       posúva na ďalší riadok — spolu prejdú všetkých 24 snímok. */
+    filter: drop-shadow(0 12px 28px rgb(0 0 0 / 0.45));
+    /* Percentuálny background-position sa počíta z rozdielu veľkostí, nie z
+       šírky prvku: pri pozadí 6× širšom prejde 0 % → 100 % presne všetkých šesť
+       stĺpcov. jump-none zaručí, že sa trafí aj prvá aj posledná snímka. */
     animation:
-      spin-cols calc(var(--dur) / var(--rows)) steps(var(--cols)) infinite,
-      spin-rows var(--dur) steps(var(--rows)) infinite;
+      spin-cols calc(var(--spin) / var(--rows)) steps(var(--cols), jump-none) infinite,
+      spin-rows var(--spin) steps(var(--rows), jump-none) infinite;
   }
 
   @keyframes spin-cols {
-    to { background-position-x: calc(var(--cols) * -100%); }
+    from { background-position-x: 0%; }
+    to { background-position-x: 100%; }
   }
   @keyframes spin-rows {
-    to { background-position-y: calc(var(--rows) * -100%); }
+    from { background-position-y: 0%; }
+    to { background-position-y: 100%; }
   }
 
-  /* Na úzkych obrazovkách je hero jednostĺpcový — vyhradené miesto by tam bola
-     len diera pod tlačidlami. */
+  @media (max-width: 1100px) {
+    .avatar { --sprite-h: 190px; }
+  }
+
+  /* Na úzkych obrazovkách je hero jednostĺpcový — avatar by tam len tlačil
+     text dole, tak ho schováme. */
   @media (max-width: 760px) {
     .avatar { display: none; }
   }
