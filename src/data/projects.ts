@@ -108,8 +108,9 @@ export const projects: Project[] = [
   },
   {
     slug: "dravio",
-    // TODO: nahradiť screenshotom z dravio.sk (public/assets/dravio.webp)
-    img: "/assets/thumb-fallback.svg",
+    // Zástupná grafika v brandingu Dravia — nie screenshot. Až budeš mať reálny
+    // záber z dravio.sk, ulož ho ako public/assets/dravio.webp a prepíš tento riadok.
+    img: "/assets/dravio-placeholder.svg",
     live: "https://dravio.sk",
     // Klientsky projekt — repozitár je súkromný, odkaz na kód zámerne chýba.
     concept: false,

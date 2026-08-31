@@ -79,9 +79,10 @@ Texty projektov a case studies sú dvojjazyčné priamo v `src/data/projects.ts`
 (bloky `sk` a `en` pri každom projekte). `code` je voliteľné — klientske projekty
 so súkromným repozitárom tlačidlo na kód jednoducho nemajú.
 
-Náhľady projektov sú v `public/assets/`. **DRAVIO zatiaľ používa zástupný
-`thumb-fallback.svg`** — keď budeš mať screenshot z dravio.sk, ulož ho ako
-`public/assets/dravio.webp` a prepíš `img` v `projects.ts`.
+Náhľady projektov sú v `public/assets/`. **DRAVIO zatiaľ používa zástupnú
+grafiku `dravio-placeholder.svg`** (branding firmy, nie screenshot) — keď budeš
+mať reálny záber z dravio.sk, ulož ho ako `public/assets/dravio.webp` a prepíš
+`img` v `projects.ts`.
 
 ---
 
