@@ -3,7 +3,7 @@
 Osobné portfólio ako **bento doska**: všetko podstatné na jednej obrazovke, detaily
 na podstránkach. Astro + vanilla JS, nasadené na Verceli.
 
-**Live:** https://strananekm.com
+**Live:** https://www.strananekm.com
 
 ---
 
@@ -24,7 +24,7 @@ a `GUESTBOOK_SALT`.
 ## Štruktúra
 
 ```
-astro.config.mjs          Vercel adaptér, site = https://strananekm.com
+astro.config.mjs          Vercel adaptér, site = https://www.strananekm.com
 src/
   styles/tokens.css       farby, rozmery, akcentové témy
   styles/base.css         reset, mriežka na pozadí, spoločné drobnosti
@@ -157,8 +157,14 @@ premenná `--avatar-sheet` v `tokens.css`, takže postava má vždy farbu témy.
 Vercel projekt **`strananekm`** je napojený na tento repozitár, Astro si nájde sám.
 V *Settings → Environment Variables* musia byť `DATABASE_URL` a `GUESTBOOK_SALT`.
 
-Doména `strananekm.com` je nastavená ako `site` v `astro.config.mjs` — z nej sa
+`site` v `astro.config.mjs` je **`https://www.strananekm.com`** — z neho sa
 odvodzuje `canonical`, `og:url`, `og:image`, `hreflang` aj sitemap.
+
+> Musí sedieť s doménou, ktorú Vercel označuje ako primárnu. Apex
+> `strananekm.com` robí 308 presmerovanie na `www`, takže kanonický host je
+> `www`. Keby `site` ukazovalo na apex, Google by pri každom načítaní sitemapy
+> aj kanonickej adresy narazil na redirect. Ak niekedy prehodíš primárnu doménu
+> vo Verceli na apex, zmeň aj `site`.
 
 ### Indexovanie
 

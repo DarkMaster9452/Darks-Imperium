@@ -24,7 +24,11 @@ const t = useTranslations(lang);
 
 const pageTitle = title ? `${title} — Martin Straňanek` : t("siteTitle");
 const pageDesc = description ?? t("siteDesc");
-const site = "https://strananekm.com";
+/**
+ * Doména má jediný zdroj pravdy — `site` v astro.config.mjs. Keby sa písala
+ * natvrdo aj tu, pri zmene domény by canonical a sitemap ukazovali inam.
+ */
+const site = Astro.site!.origin;
 const canonical = new URL(localizePath(path, lang), site).href;
 const other = otherLang(lang);
 const otherHref = localizePath(path, other);

@@ -4,7 +4,10 @@ import vercel from "@astrojs/vercel";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://strananekm.com",
+  // Apex strananekm.com robí na Verceli 308 na www, takže kanonický host je www.
+  // Z tejto hodnoty sa odvodzuje canonical, og:url, hreflang aj sitemap — keby
+  // ukazovali na apex, Google by pri každom načítaní narazil na presmerovanie.
+  site: "https://www.strananekm.com",
   output: "static",
   adapter: vercel(),
   trailingSlash: "never",
