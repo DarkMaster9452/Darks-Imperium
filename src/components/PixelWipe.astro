@@ -19,14 +19,19 @@ const cells = Array.from({ length: COLS * ROWS }, (_, i) => ({
   }
 </div>
 
-<style define:vars={{ cols: COLS, rows: ROWS }}>
+{/*
+  Rozmery mriežky sú v CSS napevno, nie cez define:vars — to by pripísalo
+  --cols a --rows do style atribútu každej z 364 dlaždíc a zbytočne nafúklo
+  HTML o desiatky kilobajtov. Pri zmene COLS/ROWS treba upraviť aj repeat() nižšie.
+*/}
+<style>
   .wipe {
     position: fixed;
     inset: 0;
     z-index: 90;
     display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
-    grid-template-rows: repeat(var(--rows), 1fr);
+    grid-template-columns: repeat(26, 1fr);
+    grid-template-rows: repeat(14, 1fr);
     pointer-events: none;
     visibility: hidden;
   }
