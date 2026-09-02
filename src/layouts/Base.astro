@@ -10,6 +10,7 @@ import { useTranslations, otherLang, localizePath, type Lang } from "../i18n/uti
 import PixelWipe from "../components/PixelWipe.astro";
 import Dock from "../components/Dock.astro";
 import SoundBinder from "../components/SoundBinder.astro";
+import Loader from "../components/Loader.astro";
 
 interface Props {
   lang: Lang;
@@ -38,7 +39,7 @@ const otherHref = localizePath(path, other);
 <html lang={lang} data-accent="crimson">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDesc} />
     <link rel="canonical" href={canonical} />
@@ -90,6 +91,7 @@ const otherHref = localizePath(path, other);
   <body>
     <a class="skip-link" href="#main">{t("skipToContent")}</a>
 
+    <Loader />
     <PixelWipe />
 
     <main id="main" class="board">
@@ -106,6 +108,9 @@ const otherHref = localizePath(path, other);
         width: min(100% - 24px, var(--board));
         margin-inline: auto;
         padding-block: clamp(16px, 3vh, 28px) 64px;
+        /* iPhone v landscape / gestá zdola — nech obsah nezaleziehá pod výrez. */
+        padding-inline: max(0px, env(safe-area-inset-left)) max(0px, env(safe-area-inset-right));
+        padding-bottom: max(64px, calc(env(safe-area-inset-bottom) + 24px));
       }
     </style>
   </body>

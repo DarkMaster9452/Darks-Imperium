@@ -32,8 +32,8 @@ const t = useTranslations(lang);
 <style>
   .dock {
     position: fixed;
-    right: 12px;
-    bottom: 12px;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
     z-index: 50;
     display: grid;
     gap: 6px;
@@ -51,6 +51,16 @@ const t = useTranslations(lang);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+
+  /* Dotykové ovládanie — Apple/WCAG odporúčajú aspoň ~40-44px cieľ. */
+  @media (pointer: coarse) {
+    .dock-btn {
+      width: 42px;
+      height: 42px;
+    }
+    .dock-btn svg { width: 18px; height: 18px; }
+    .lang { font-size: 10px; }
   }
   .dock-btn:hover {
     color: var(--accent);
