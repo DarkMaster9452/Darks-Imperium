@@ -1,0 +1,108 @@
+---
+/**
+ * Úvodný preloader — mriežka deviatich štvorčekov, ktorá sa rozsvieti po
+ * diagonále (rovnaký motív ako PixelWipe), kým sa stránka prvý raz načíta.
+ *
+ * Ukáže sa len pri skutočnom prvom vstupe do session (kontrolované cez
+ * sessionStorage) — pri prechodoch medzi stránkami už beží PixelWipe, takže
+ * druhý loader navrch by len rušil.
+ */
+const cells = Array.from({ length: 9 }, (_, i) => ({
+  col: i % 3,
+  row: Math.floor(i / 3),
+}));
+---
+
+<div class="loader" data-loader aria-hidden="true">
+  <div class="loader-grid">
+    {cells.map(({ col, row }) => <i style={`--d:${(col + row) * 90}ms`} />)}
+  </div>
+  <p class="loader-label">Martin Straňanek</p>
+</div>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: var(--bg);
+    transition: opacity 0.45s var(--ease), visibility 0.45s var(--ease);
+  }
+
+  .loader[data-state="out"] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 10px);
+    grid-template-rows: repeat(3, 10px);
+    gap: 6px;
+  }
+
+  .loader-grid i {
+    background: var(--accent);
+    border-radius: 2px;
+    animation: loader-blink 1.1s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+
+  @keyframes loader-blink {
+    0%, 100% { transform: scale(0.4); opacity: 0.25; }
+    50% { transform: scale(1); opacity: 1; }
+  }
+
+  .loader-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  (function () {
+    const loader = document.querySelector<HTMLElement>("[data-loader]");
+    if (!loader) return;
+
+    let seen = true;
+    try {
+      seen = sessionStorage.getItem("ms-boot") === "1";
+      if (!seen) sessionStorage.setItem("ms-boot", "1");
+    } catch {
+      /* privátny režim bez sessionStorage — radšej loader hneď schováme */
+    }
+
+    // Už videné v tejto session (alebo prechod medzi stránkami, kde beží
+    // PixelWipe) — zmiznúť bez animácie, žiadny druhý wipe navrch.
+    if (seen) {
+      loader.style.display = "none";
+      return;
+    }
+
+    let hidden = false;
+    const hide = () => {
+      if (hidden) return;
+      hidden = true;
+      loader.dataset.state = "out";
+      setTimeout(() => loader.remove(), 500);
+    };
+
+    if (document.readyState === "complete") {
+      hide();
+    } else {
+      window.addEventListener("load", hide, { once: true });
+      // Poistka, keby sa niektorý zdroj (font, obrázok) načítaval nezvyčajne dlho.
+      setTimeout(hide, 2500);
+    }
+  })();
+</script>
