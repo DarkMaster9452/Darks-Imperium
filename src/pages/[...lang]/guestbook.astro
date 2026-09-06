@@ -265,7 +265,8 @@ const labels = {
 
   function setupGuestbook() {
     const root = document.querySelector<HTMLElement>("[data-guestbook]");
-    if (!root) return;
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = "1";
 
     const lang = root.dataset.lang === "en" ? "en" : "sk";
     const errors = JSON.parse(root.dataset.errors ?? "{}") as Record<string, string>;

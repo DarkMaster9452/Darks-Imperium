@@ -70,9 +70,22 @@ const cells = Array.from({ length: 9 }, (_, i) => ({
 </style>
 
 <script>
-  (function () {
+  /**
+   * Tento skript je bundlovaný ako ES modul — pri klientskom prechode medzi
+   * stránkami prehliadač ten istý modul znova nespustí (moduly bežia raz za
+   * URL), aj keď Base.astro na novej stránke vyrenderuje čerstvý <div
+   * data-loader>. Bez počúvania na "astro:page-load" by ten nový div ostal
+   * navždy viditeľný — presne to bola pôvodná chyba ("zaseknutá kocka").
+   *
+   * Guard cez loader.dataset.msChecked je naviac potrebný, lebo
+   * "astro:page-load" sa spustí aj pri úplne prvom načítaní — bez neho by sa
+   * ten istý div spracoval dvakrát a druhé spustenie by ho schovalo skôr,
+   * než stihne dobehnúť úvodná animácia.
+   */
+  function checkLoader() {
     const loader = document.querySelector<HTMLElement>("[data-loader]");
-    if (!loader) return;
+    if (!loader || loader.dataset.msChecked) return;
+    loader.dataset.msChecked = "1";
 
     let seen = true;
     try {
@@ -104,5 +117,8 @@ const cells = Array.from({ length: 9 }, (_, i) => ({
       // Poistka, keby sa niektorý zdroj (font, obrázok) načítaval nezvyčajne dlho.
       setTimeout(hide, 2500);
     }
-  })();
+  }
+
+  checkLoader();
+  document.addEventListener("astro:page-load", checkLoader);
 </script>

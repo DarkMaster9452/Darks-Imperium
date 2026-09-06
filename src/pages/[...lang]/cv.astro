@@ -319,13 +319,18 @@ const labels = { sending: t("ctSending"), thanks: t("ctThanks") };
   import { play, CLICK, SENT } from "../../lib/sound";
 
   function setupCv() {
-    document.querySelector<HTMLButtonElement>("[data-print]")?.addEventListener("click", () => {
-      play(CLICK);
-      window.print();
-    });
+    const printBtn = document.querySelector<HTMLButtonElement>("[data-print]");
+    if (printBtn && !printBtn.dataset.bound) {
+      printBtn.dataset.bound = "1";
+      printBtn.addEventListener("click", () => {
+        play(CLICK);
+        window.print();
+      });
+    }
 
     const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
-    if (!form) return;
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = "1";
 
     const lang = form.dataset.lang === "en" ? "en" : "sk";
     const errors = JSON.parse(form.dataset.errors ?? "{}") as Record<string, string>;
