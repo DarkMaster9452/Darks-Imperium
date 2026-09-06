@@ -38,10 +38,13 @@ export const GET: APIRoute = async ({ url }) => {
       offset ${(safePage - 1) * PER_PAGE}
     `);
 
+    // no-store: zoznam sa mení pri každom príspevku a klient si po odoslaní
+    // hneď pýta čerstvú stránku 1 — zdieľaná cache (CDN) by mu na 30s vracala
+    // stav spred submitu, akoby sa nový odkaz vôbec neuložil.
     return json(
       { entries, total, page: safePage, totalPages },
       200,
-      { "Cache-Control": "public, max-age=30, stale-while-revalidate=300" },
+      { "Cache-Control": "no-store" },
     );
   } catch (error) {
     console.error("guestbook GET failed:", error);
