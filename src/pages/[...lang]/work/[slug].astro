@@ -1,7 +1,7 @@
 ---
 import SubPage from "../../../layouts/SubPage.astro";
-import Panel from "../../../components/Panel.astro";
-import { projects } from "../../../data/projects";
+import Shot from "../../../components/Shot.astro";
+import { projects, type Project } from "../../../data/projects";
 import { LANGS, DEFAULT_LANG, useTranslations, localizePath, type Lang } from "../../../i18n/utils";
 
 export function getStaticPaths() {
@@ -16,33 +16,98 @@ export function getStaticPaths() {
   );
 }
 
-const { lang, project } = Astro.props as { lang: Lang; project: (typeof projects)[number] };
+const { lang, project } = Astro.props as { lang: Lang; project: Project };
 const t = useTranslations(lang);
 const c = project[lang];
+
+const statusLabel = {
+  product: t("labelProduct"),
+  live: t("labelLive"),
+  concept: t("labelConcept"),
+}[project.status];
+
+const primary = project.links.find((l) => l.primary) ?? project.links[0];
+
+/* Popisok v lište okna: pri vlastnom programe názov, inak doména živej ukážky. */
+const frameLabel =
+  project.status === "product"
+    ? c.title
+    : primary && new URL(primary.href).hostname.replace(/^www\./, "");
 ---
 
 <SubPage
   lang={lang}
   path={`/work/${project.slug}`}
   title={c.title}
+  eyebrow={c.tagline}
   subtitle={c.summary}
   backHref={localizePath("/work", lang)}
 >
   <article class="case">
-    <Panel pad="0" class="shot">
-      <figure class="shot-figure">
-        <img src={project.img} alt="" width="1200" height="750" decoding="async" />
-      </figure>
-    </Panel>
+    {
+      project.illustration ? (
+        <div class="illu">
+          <img src={project.img} alt="" width="760" height="480" fetchpriority="high" />
+        </div>
+      ) : (
+        <Shot src={project.img} label={frameLabel || undefined} eager class="hero-shot" />
+      )
+    }
 
     <dl class="meta">
       <div><dt>{t("caseRole")}</dt><dd>{c.role}</dd></div>
       <div><dt>{t("caseYear")}</dt><dd>{project.year}</dd></div>
-      <div>
-        <dt>{t("caseOutcome")}</dt>
-        <dd>{project.concept ? t("labelConcept") : t("labelLive")}</dd>
-      </div>
+      <div><dt>{t("caseOutcome")}</dt><dd class="status">{statusLabel}</dd></div>
     </dl>
+
+    <div class="links">
+      {
+        project.links.map((link) => (
+          <a
+            class:list={["btn", { primary: link.primary }]}
+            href={link.href}
+            target="_blank"
+            rel="noopener"
+          >
+            {link[lang]} <span aria-hidden="true">↗</span>
+          </a>
+        ))
+      }
+    </div>
+
+    {
+      c.metrics && (
+        <ul class="metrics">
+          {c.metrics.map((m) => (
+            <li>
+              <b>{m.v}</b>
+              <span>{m.l}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {c.context && <div class="lead">{c.context.map((p) => <p>{p}</p>)}</div>}
+
+    {
+      (c.audience || c.ownership) && (
+        <div class="cards">
+          {c.audience && (
+            <section class="card">
+              <h2>{t("caseAudience")}</h2>
+              <p>{c.audience}</p>
+            </section>
+          )}
+          {c.ownership && (
+            <section class="card">
+              <h2>{t("caseOwner")}</h2>
+              <p>{c.ownership}</p>
+            </section>
+          )}
+        </div>
+      )
+    }
 
     <section class="block">
       <h2>{t("caseProblem")}</h2>
@@ -56,6 +121,56 @@ const c = project[lang];
       </ul>
     </section>
 
+    {
+      c.features && (
+        <section class="block wide">
+          <h2>{t("caseFeatures")}</h2>
+          <ul class="notes">
+            {c.features.map((f) => (
+              <li>
+                <h3>{f.h}</h3>
+                <p>{f.p}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      project.gallery && (
+        <section class="block wide">
+          <h2>{t("caseScreens")}</h2>
+          <ul class="gallery">
+            {project.gallery.map((s) => (
+              <li>
+                <figure>
+                  <Shot src={s.src} alt={s[lang]} />
+                  <figcaption>{s[lang]}</figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      c.build && (
+        <section class="block wide">
+          <h2>{t("caseBuild")}</h2>
+          <ul class="notes">
+            {c.build.map((b) => (
+              <li>
+                <h3>{b.h}</h3>
+                <p>{b.p}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
     <section class="block">
       <h2>{t("caseStack")}</h2>
       <ul class="tags">
@@ -68,43 +183,59 @@ const c = project[lang];
       <p>{c.outcome}</p>
     </section>
 
-    <div class="links">
-      <a class="btn primary" href={project.live} target="_blank" rel="noopener">
-        {t("caseLive")} ↗
-      </a>
+    <div class="links end">
       {
-        project.code && (
-          <a class="btn" href={project.code} target="_blank" rel="noopener">
-            {t("caseCode")} →
+        project.links.map((link) => (
+          <a
+            class:list={["btn", { primary: link.primary }]}
+            href={link.href}
+            target="_blank"
+            rel="noopener"
+          >
+            {link[lang]} <span aria-hidden="true">↗</span>
           </a>
-        )
+        ))
       }
     </div>
   </article>
 </SubPage>
 
 <style>
+  /* Text drží úzku mieru kvôli čítaniu, obrázky a mriežky sa rozťahujú. */
   .case {
-    max-width: 720px;
+    --prose: 680px;
+    max-width: 1000px;
     margin-inline: auto;
   }
 
-  .shot-figure { overflow: hidden; }
-  .shot img {
-    width: 100%;
-    height: clamp(220px, 34vw, 400px);
-    object-fit: cover;
-    object-position: top;
+  .case > :global(.hero-shot) { margin-bottom: 26px; }
+
+  .illu {
+    overflow: hidden;
+    margin-bottom: 26px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
   }
+  .illu img { width: 100%; height: auto; }
+
+  .meta,
+  .links,
+  .lead,
+  .cards,
+  .metrics,
+  .block:not(.wide) { max-width: var(--prose); margin-inline: auto; }
 
   .meta {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
     gap: 12px;
-    margin: 22px 0 34px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
   dt {
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     font-family: var(--font-mono);
     font-size: 9px;
     letter-spacing: 0.14em;
@@ -112,11 +243,98 @@ const c = project[lang];
     color: var(--muted);
   }
   dd { margin: 0; font-size: 13px; }
+  dd.status { color: var(--accent); transition: color var(--dur) var(--ease); }
 
-  .block + .block { margin-top: 26px; }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .links.end { margin-top: 36px; }
 
-  .block h2 {
-    margin-bottom: 8px;
+  .btn {
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    transition:
+      background var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+  .btn:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn.primary {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .btn.primary:hover { filter: brightness(1.12); }
+
+  /* Čísla pod úvodným záberom. */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr));
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .metrics li {
+    padding: 14px 16px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+  .metrics b {
+    display: block;
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    transition: color var(--dur) var(--ease);
+  }
+  .metrics span {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .lead { margin-top: 32px; }
+  .lead p {
+    font-size: 16px;
+    line-height: 1.68;
+    color: var(--text);
+  }
+  .lead p + p { margin-top: 12px; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .card {
+    padding: 18px 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--dur) var(--ease);
+  }
+  .card p { font-size: 13px; line-height: 1.7; color: var(--text-2); }
+
+  .block { margin-top: 40px; }
+  .block.wide { margin-top: 52px; }
+
+  .case h2 {
+    margin-bottom: 10px;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -124,10 +342,16 @@ const c = project[lang];
     color: var(--accent);
     transition: color var(--dur) var(--ease);
   }
-  .block p { color: var(--text-2); }
+  .block.wide > h2 {
+    max-width: var(--prose);
+    margin-inline: auto;
+    margin-bottom: 18px;
+  }
 
-  .bullets { display: grid; gap: 6px; color: var(--text-2); }
-  .bullets li { padding-left: 16px; position: relative; }
+  .block p { line-height: 1.7; color: var(--text-2); }
+
+  .bullets { display: grid; gap: 8px; color: var(--text-2); }
+  .bullets li { padding-left: 18px; position: relative; line-height: 1.6; }
   .bullets li::before {
     content: "";
     position: absolute;
@@ -136,6 +360,44 @@ const c = project[lang];
     width: 5px;
     height: 5px;
     background: var(--accent);
+    transition: background var(--dur) var(--ease);
+  }
+
+  /* Moduly a poznámky k architektúre — dva až tri stĺpce podľa šírky. */
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 10px;
+  }
+  .notes li {
+    padding: 20px 22px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  }
+  .notes li:hover {
+    background: var(--panel-3);
+    border-color: var(--accent-line);
+  }
+  .notes h3 {
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .notes p { font-size: 13px; line-height: 1.68; color: var(--text-2); }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+    gap: 18px;
+  }
+  .gallery figcaption {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--muted);
   }
 
   .tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -148,26 +410,4 @@ const c = project[lang];
     border: 1px solid var(--line);
     border-radius: 999px;
   }
-
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 36px;
-  }
-
-  .btn {
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid var(--line-strong);
-    border-radius: var(--radius-sm);
-    transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-  }
-  .btn:hover {
-    color: var(--accent-ink);
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .btn.primary { border-color: var(--accent-line); }
 </style>

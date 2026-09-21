@@ -47,7 +47,7 @@ public/                   screenshoty, favicon, og.png, sprites/
 |---|---|---|
 | `/` | `/en` | bento doska |
 | `/work` | `/en/work` | všetky projekty + služby |
-| `/work/<slug>` | `/en/work/<slug>` | case study (`pyro`, `osk`, `dravio`, `vantra`) |
+| `/work/<slug>` | `/en/work/<slug>` | case study (`gridservis`, `pyro`, `dravio`, `vantra`) |
 | `/guestbook` | `/en/guestbook` | návštevná kniha |
 | `/cv` | `/en/cv` | životopis + kontaktný formulár |
 | `/now` | `/en/now` | now stránka — dostupnosť a čo práve robím |
@@ -79,8 +79,14 @@ Slovenčina je na koreňových cestách, angličtina pod `/en`. Preklady sú v
 neprejde `npm run check` ani buildom.** Netreba na to žiadny skript.
 
 Texty projektov a case studies sú dvojjazyčné priamo v `src/data/projects.ts`
-(bloky `sk` a `en` pri každom projekte). `code` je voliteľné — klientske projekty
-so súkromným repozitárom tlačidlo na kód jednoducho nemajú.
+(bloky `sk` a `en` pri každom projekte). Odkazy na živú ukážku, demo či kód nesie
+pole `links` — klientske projekty so súkromným repozitárom tam odkaz na kód
+jednoducho nemajú.
+
+Polia `tagline`, `context`, `audience`, `ownership`, `features`, `build`,
+`metrics` a `gallery` sú voliteľné a používa ich zatiaľ len GridServis. Keď
+chýbajú, case study sa vykreslí v krátkej podobe — nič netreba dopĺňať.
+`featured: true` dá projektu na `/work` kartu cez celú šírku.
 
 Náhľady projektov sú v `public/assets/`. **DRAVIO zatiaľ používa zástupnú
 grafiku `dravio-placeholder.svg`** (branding firmy, nie screenshot) — keď budeš

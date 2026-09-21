@@ -51,6 +51,14 @@ export const sk = {
   clockSame: "rovnaké pásmo",
   available: "Prijímam projekty",
 
+  // ── pruh dostupnosti na doske ─────────────────────────────────────────
+  availBadge: "Voľná kapacita",
+  availTitle: "Prijímam nových klientov",
+  availText:
+    "Mám voľnú kapacitu na nové weby a systémy na mieru — ozvem sa do 24 hodín.",
+  availCta: "Napíšte mi",
+  availHow: "Ako to prebieha",
+
   // ── now ───────────────────────────────────────────────────────────────
   nowTitle: "Práve teraz",
   /* Krátko — dlaždica má na doske pevnú výšku. Meň spolu s dátumom v Now.astro. */
@@ -87,10 +95,16 @@ export const sk = {
   caseOutcome: "Stav",
   caseRole: "Rola",
   caseYear: "Rok",
-  caseLive: "Živá ukážka",
-  caseCode: "Kód",
+  caseAudience: "Pre koho to je",
+  caseOwner: "Vlastníctvo a dostupnosť",
+  caseFeatures: "Čo to vie",
+  caseBuild: "Ako je to postavené",
+  caseScreens: "Obrazovky",
+  caseOpen: "Celá case study",
   labelLive: "Live",
   labelConcept: "Koncept",
+  labelProduct: "Vlastný produkt",
+  featuredLabel: "Hlavný projekt",
 
   // ── návštevná kniha ───────────────────────────────────────────────────
   gbTitle: "Návštevná kniha",
