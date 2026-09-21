@@ -42,6 +42,13 @@ export const en: Record<keyof typeof sk, string> = {
   clockSame: "same timezone",
   available: "Taking on projects",
 
+  availBadge: "Open for work",
+  availTitle: "Taking on new clients",
+  availText:
+    "I have capacity for new sites and custom systems — I reply within 24 hours.",
+  availCta: "Get in touch",
+  availHow: "How it works",
+
   nowTitle: "Now",
   nowText: "Building custom websites and my own projects.",
 
@@ -73,10 +80,16 @@ export const en: Record<keyof typeof sk, string> = {
   caseOutcome: "Status",
   caseRole: "Role",
   caseYear: "Year",
-  caseLive: "Live demo",
-  caseCode: "Code",
+  caseAudience: "Who it's for",
+  caseOwner: "Ownership & availability",
+  caseFeatures: "What it does",
+  caseBuild: "How it's built",
+  caseScreens: "Screens",
+  caseOpen: "Read the case study",
   labelLive: "Live",
   labelConcept: "Concept",
+  labelProduct: "Own product",
+  featuredLabel: "Main project",
 
   gbTitle: "Guestbook",
   gbSub: "Drop a note, say hi, or share your thoughts. I read every message.",

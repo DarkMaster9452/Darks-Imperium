@@ -9,11 +9,13 @@ interface Props {
   subtitle?: string;
   path: string;
   description?: string;
+  /** Mono riadok nad nadpisom — napríklad „Vlastný produkt“. */
+  eyebrow?: string;
   /** Kam vedie „Späť" — predvolene na dosku. */
   backHref?: string;
 }
 
-const { lang, title, subtitle, path, description, backHref } = Astro.props;
+const { lang, title, subtitle, path, description, eyebrow, backHref } = Astro.props;
 const t = useTranslations(lang);
 const back = backHref ?? localizePath("/", lang);
 ---
@@ -22,6 +24,7 @@ const back = backHref ?? localizePath("/", lang);
   <a class="back" href={back}>{t("back")}</a>
 
   <header class="head">
+    {eyebrow && <p class="eyebrow head-eyebrow">{eyebrow}</p>}
     <h1>{title}</h1>
     {subtitle && <p class="sub">{subtitle}</p>}
   </header>
@@ -47,6 +50,12 @@ const back = backHref ?? localizePath("/", lang);
   .head {
     margin: clamp(28px, 6vh, 56px) auto clamp(24px, 5vh, 44px);
     text-align: center;
+  }
+
+  .head-eyebrow {
+    margin-bottom: 12px;
+    color: var(--accent);
+    transition: color var(--dur) var(--ease);
   }
 
   h1 {

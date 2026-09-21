@@ -1,0 +1,142 @@
+---
+/** Pruh cez celú šírku dosky: voľná kapacita a rovno odkaz na napísanie. */
+import Panel from "../Panel.astro";
+import { useTranslations, localizePath, type Lang } from "../../i18n/utils";
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<Panel class="avail" pad="clamp(15px, 2vw, 18px) clamp(16px, 2.4vw, 22px)">
+  <div class="avail-in">
+    <div class="avail-copy">
+      <h2>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="badge">{t("availBadge")}</span>
+        {t("availTitle")}
+      </h2>
+      <p class="text">{t("availText")}</p>
+    </div>
+
+    <div class="avail-actions">
+      <a class="cta" href="mailto:strananekm@gmail.com">{t("availCta")}</a>
+      <a class="ghost" href={localizePath("/now", lang)}>{t("availHow")} →</a>
+    </div>
+  </div>
+</Panel>
+
+<style>
+  .avail {
+    background:
+      linear-gradient(120deg, var(--accent-soft), transparent 42%),
+      var(--panel);
+    border-color: var(--accent-line);
+  }
+
+  .avail-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    height: 100%;
+  }
+
+  .avail-copy { min-width: 0; }
+
+  .badge {
+    margin-right: 4px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dot {
+    position: relative;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+  }
+  /* Krúžok, ktorý sa raz za dve sekundy rozšíri — bodka tým „dýcha". */
+  .dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: ping 2s var(--ease) infinite;
+  }
+
+  @keyframes ping {
+    0% { transform: scale(1); opacity: 0.6; }
+    70%, 100% { transform: scale(2.8); opacity: 0; }
+  }
+
+  h2 {
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+
+  .text {
+    max-width: 74ch;
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .avail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cta,
+  .ghost {
+    display: grid;
+    place-items: center;
+    height: 40px;
+    padding-inline: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    transition:
+      background var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+
+  .cta {
+    color: var(--accent-ink);
+    background: var(--accent);
+  }
+  .cta:hover { color: var(--accent-ink); filter: brightness(1.12); }
+
+  .ghost {
+    font-weight: 500;
+    color: var(--text);
+    border-color: var(--line-strong);
+  }
+  .ghost:hover {
+    color: var(--accent-ink);
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 620px) {
+    .avail-actions { width: 100%; }
+    .cta, .ghost { flex: 1; }
+  }
+</style>

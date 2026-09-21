@@ -1,5 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
+import Available from "../../components/tiles/Available.astro";
 import Hero from "../../components/tiles/Hero.astro";
 import Stack from "../../components/tiles/Stack.astro";
 import Contact from "../../components/tiles/Contact.astro";
@@ -21,6 +22,7 @@ const { lang } = Astro.props as { lang: Lang };
 
 <Base lang={lang} path="/">
   <div class="board-grid">
+    <div class="area-avail"><Available lang={lang} /></div>
     <div class="area-hero"><Hero lang={lang} /></div>
     <div class="area-stack"><Stack lang={lang} /></div>
 
@@ -44,6 +46,7 @@ const { lang } = Astro.props as { lang: Lang };
     gap: var(--gap);
     align-items: stretch;
     grid-template-areas:
+      "avail   avail avail avail"
       "hero    hero  hero  stack"
       "hero    hero  hero  stack"
       "hero    hero  hero  stack"
@@ -54,13 +57,16 @@ const { lang } = Astro.props as { lang: Lang };
       "contact cv    guest footer";
   }
 
+  /* Pruh o dostupnosti si berie vlastný riadok navyše, zvyšných osem si delí
+     zvyšok výšky — doska tak ostáva na jednu obrazovku ako predtým. */
   @media (min-width: 1200px) {
     .board-grid {
-      height: max(calc(100dvh - 96px), 780px);
-      grid-template-rows: repeat(8, minmax(0, 1fr));
+      height: max(calc(100dvh - 96px), 820px);
+      grid-template-rows: auto repeat(8, minmax(0, 1fr));
     }
   }
 
+  .area-avail { grid-area: avail; }
   .area-hero { grid-area: hero; }
   .area-stack { grid-area: stack; }
   .area-contact { grid-area: contact; }
@@ -79,6 +85,7 @@ const { lang } = Astro.props as { lang: Lang };
     .board-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-areas:
+        "avail   avail"
         "hero    hero"
         "stack   stack"
         "contact clock"
@@ -92,6 +99,7 @@ const { lang } = Astro.props as { lang: Lang };
     .board-grid {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
+        "avail"
         "hero"
         "clock"
         "work"
